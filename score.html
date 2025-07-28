@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master - Score</title>
+    <link rel="stylesheet" href="Questions.css">
+    <style>
+        .quiz {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .category {
+            margin: 10px 0;
+        }
+        .controls button {
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #1565c0;
+        }
+        .quiz-summary {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .question-summary {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .correct {
+            color: green;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        .incorrect {
+            color: red;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        .answer-text {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz">
+        <h1>Quiz Master</h1>
+        <p class="category">CATEGORY: <span id="category">General Knowledge</span></p>
+        <p class="category">DIFFICULTY: <span id="difficulty">Medium</span></p>
+        <p class="category">No of Questions: <span id="number">10</span></p>
+        <h1>Your Score: <span id="score">0</span>/<span id="total">0</span></h1>
+
+        <div class="controls">
+            <button onclick="handleHome()">Go To Homepage</button>
+        </div>
+
+        <div class="quiz-summary">
+            <h3>Quiz Summary</h3>
+            <div id="summaryContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load data from sessionStorage
+        const category = sessionStorage.getItem('category') || "General Knowledge";
+        const difficulty = sessionStorage.getItem('difficulty') || "Medium";
+        const number = sessionStorage.getItem('number') || "10";
+        const scoreData = JSON.parse(sessionStorage.getItem('scoreData')) || {
+            score: 0,
+            total: 0,
+            questions: [],
+            userAnswers: []
+        };
+        let { score, total, questions, userAnswers } = scoreData;
+
+        // Function to normalize answers for comparison
+        function normalizeAnswer(answer) {
+            if (!answer) return "";
+            return answer.trim().replace(/[^a-zA-Z0-9\s]/g, '').toLowerCase();
+        }
+
+        // Ensure userAnswers and questions are arrays
+        if (!Array.isArray(userAnswers)) {
+            console.error("userAnswers is not an array:", userAnswers);
+            userAnswers = new Array(questions.length).fill("Not answered");
+        }
+        if (!Array.isArray(questions)) {
+            console.error("questions is not an array:", questions);
+            questions = [];
+        }
+
+        // Recalculate score with normalized answers
+        if (questions.length > 0 && userAnswers.length === questions.length) {
+            score = questions.reduce((acc, q, idx) => {
+                const userAnswer = userAnswers[idx] || "Not answered";
+                const correctAnswer = q.correctOption || "Not specified";
+                const normalizedUserAnswer = normalizeAnswer(userAnswer);
+                const normalizedCorrectAnswer = normalizeAnswer(correctAnswer);
+                const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+                console.log(`Question ${idx + 1}: User Answer: "${userAnswer}", Correct Answer: "${correctAnswer}", Correct: ${isCorrect}`);
+                return acc + (isCorrect ? 1 : 0);
+            }, 0);
+            scoreData.score = score;
+            sessionStorage.setItem('scoreData', JSON.stringify(scoreData));
+        } else {
+            console.error("Mismatch between questions and userAnswers lengths:", questions.length, userAnswers.length);
+            score = 0;
+        }
+
+        // Populate static fields
+        document.getElementById('category').textContent = category;
+        document.getElementById('difficulty').textContent = difficulty;
+        document.getElementById('number').textContent = number;
+        document.getElementById('score').textContent = score;
+        document.getElementById('total').textContent = total;
+
+        // Function to navigate back to home
+        function handleHome() {
+            window.location.href = 'index.php';
+        }
+
+        // Function to render quiz summary
+        function renderQuizSummary() {
+            const summaryContainer = document.getElementById('summaryContainer');
+            summaryContainer.innerHTML = '';
+
+            if (!questions || questions.length === 0) {
+                summaryContainer.innerHTML = '<p>No quiz data available.</p>';
+                return;
+            }
+
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index] || "Not answered";
+                const correctAnswer = question.correctOption || "Not specified";
+                const normalizedUserAnswer = normalizeAnswer(userAnswer);
+                const normalizedCorrectAnswer = normalizeAnswer(correctAnswer);
+                const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-summary';
+
+                // Question number and text
+                const questionP = document.createElement('p');
+                questionP.innerHTML = `<strong>Question ${index + 1}: ${question.question}</strong> <span class="${isCorrect ? 'correct' : 'incorrect'}">${isCorrect ? '✔' : '✖'}</span>`;
+
+                // User's answer
+                const userAnswerP = document.createElement('p');
+                userAnswerP.className = 'answer-text';
+                userAnswerP.innerHTML = `<strong>Your Answer:</strong> ${userAnswer || "Not provided"}`;
+
+                // Correct answer
+                const correctAnswerP = document.createElement('p');
+                correctAnswerP.className = 'answer-text';
+                correctAnswerP.innerHTML = `<strong>Correct Answer:</strong> ${correctAnswer}`;
+
+                // Append all elements to the question summary div
+                questionDiv.appendChild(questionP);
+                questionDiv.appendChild(userAnswerP);
+                questionDiv.appendChild(correctAnswerP);
+                summaryContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Render summary on page load
+        renderQuizSummary();
+    </script>
+</body>
+</html>

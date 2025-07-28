@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f3f3f3;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #06BBCC, #08A0B2);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin: 0 10px;
+        }
+
+        .nav-links a {
+            padding: 8px 12px;
+            color: white;
+            font-weight: 500;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feedback-container {
+            width: 70%;
+            max-width: 800px;
+            height: auto;
+            background-color: white;
+            display: flex;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 100px auto; /* Changed from 40px auto to 100px auto */
+        }
+
+        .illustration {
+            flex: 1;
+            background-color: #06BBCC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .illustration img {
+            max-width: 80%;
+            height: auto;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .form-section h1 {
+            color: #06BBCC;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #06BBCC;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group button:hover {
+            background-color: #0599A8;
+        }
+
+        .view-responses-link {
+            color: #06BBCC; /* Matches theme color */
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .view-responses-link:hover {
+            color: #0599A8; /* Darker shade on hover */
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">LearnSphere 🌟</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="discussion_forum/index.html">Discussion</a></li> 
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="quiz.html">Quiz</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="feedback-container">
+        <div class="illustration">
+            <img src="images/extra/feedback.jpeg" alt="Illustration">
+        </div>
+
+        <div class="form-section">
+            <h1>Feedback Form</h1>
+            <form id="feedback-form">
+                <div class="form-group">
+                    <label for="user-name">Name</label>
+                    <input type="text" id="user-name" name="userName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="user-feedback">Feedback</label>
+                    <textarea id="user-feedback" name="userFeedback" rows="4" placeholder="Write your feedback here..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Rate Us</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Submit Feedback</button>
+                </div>
+            </form>
+
+            <p>Already submitted feedback? <a href="view_responses.php" class="view-responses-link">View Responses</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('feedback-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            try {
+                const response = await fetch('submit_feedback.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Feedback submitted successfully!');
+                    event.target.reset();
+                } else {
+                    alert(data.error || "Failed to submit feedback");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Server error. Please try again later.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - LearnSphere</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: #f8f9fa; color: #333; }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #06BBCC, #08A0B2);
+            padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .logo { font-size: 24px; font-weight: bold; color: white; text-transform: uppercase; letter-spacing: 1.5px; }
+        .nav-links { display: flex; align-items: center; list-style: none; }
+        .nav-links li { margin: 0 10px; }
+        .nav-links .btn-start { 
+            padding: 8px 16px; 
+            color: white; 
+            font-weight: 500; 
+            background: rgba(255, 255, 255, 0.2); 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background 0.3s ease, opacity 0.3s ease; 
+            opacity: 0.9; 
+        }
+        .nav-links .btn-start:hover { 
+            background: rgba(255, 255, 255, 0.4); 
+            opacity: 1; 
+        }
+
+        /* Hero Section */
+        .hero { height: 100vh; background: url('home.jpg') no-repeat center center/cover; position: relative; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; }
+        .hero-content { text-align: center; color: white; }
+        .hero-content h1 { font-size: 48px; margin-bottom: 20px; }
+        .hero-content h3 { font-size: 24px; margin-bottom: 10px; }
+        .hero-content p { font-size: 18px; max-width: 600px; margin: 0 auto 20px; }
+        .hero-buttons .btn { padding: 10px 20px; margin: 0 10px; border-radius: 5px; text-decoration: none; }
+        .btn.blue { background: #06BBCC; color: white; }
+        .btn.white { background: white; color: #06BBCC; }
+
+        /* Features Grid Section */
+        .features-grid-section { padding: 60px 20px; }
+        .features-title { text-align: center; margin-bottom: 40px; }
+        .features-title h2 { font-size: 36px; color: #06BBCC; font-weight: 600; }
+        .features-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        .feature-item { 
+            background: #fff; 
+            border-radius: 12px; 
+            padding: 25px; 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); 
+            text-align: center; 
+            opacity: 0; 
+            transform: scale(0.9) translateY(30px); 
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+        }
+        .feature-item.visible { 
+            opacity: 1; 
+            transform: scale(1) translateY(0); 
+        }
+        .feature-item:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+        }
+        .feature-item h3 { color: #06BBCC; margin-bottom: 15px; font-size: 24px; }
+        .feature-item p { color: #555; font-size: 16px; line-height: 1.5; }
+
+        /* Footer Section */
+        footer {
+            background: #06BBCC;
+            color: #fff;
+            padding: 40px 20px;
+            box-shadow: inset 0 -4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .footer-container h3 { font-size: 18px; margin-bottom: 15px; color: #fff; text-transform: uppercase; }
+        .footer-container p { font-size: 14px; line-height: 1.6; margin-bottom: 20px; color: #E0F7FA; }
+        .footer-container ul { list-style: none; }
+        .footer-container ul li { margin-bottom: 10px; }
+        .footer-container ul li a { color: #B2EBF2; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+        .footer-container ul li a:hover { color: #fff; }
+        .footer-container ul li a::before { content: '•'; margin-right: 8px; color: #FFCA28; font-size: 10px; }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons a { 
+            color: #fff; font-size: 18px; background: rgba(255, 255, 255, 0.2); width: 30px; height: 30px; 
+            display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.3s ease; 
+        }
+        .social-icons a:hover { background: #FFCA28; color: #fff; }
+        .footer-form input { 
+            width: 100%; padding: 10px; margin-bottom: 15px; border: none; border-radius: 5px; background: rgba(255, 255, 255, 0.9); color: #333; 
+        }
+        .footer-form button { 
+            width: 100%; padding: 10px; background: linear-gradient(90deg, #FFCA28, #FFB300); color: #fff; border: none; border-radius: 5px; 
+            transition: background 0.3s ease; 
+        }
+        .footer-form button:hover { background: linear-gradient(90deg, #FFB300, #FFCA28); }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">LearnSphere 🌟</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><button class="btn-start" onclick="window.location.href='login.html'">Get Started</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="overlay">
+            <div class="hero-content">
+                <h3>Best Online Courses</h3>
+                <h1>The Best Online Learning Platform</h1>
+                <p>Online education has transformed the way people acquire knowledge, making learning more accessible, flexible, and convenient.</p>
+                <div class="hero-buttons">
+                    <a href="#courses" class="btn blue">Explore Courses</a>
+                    <a href="#quiz" class="btn white">Take a Quiz</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid Section -->
+    <section class="features-grid-section">
+        <div class="features-title">
+            <h2>Some Main Features</h2>
+        </div>
+        <div class="features-grid">
+            <!-- Courses -->
+            <div class="feature-item">
+                <h3>Courses 📚</h3>
+                <p>Learn new skills with our awesome courses! From coding to design, we've got you covered.</p>
+            </div>
+
+            <!-- Discussion Forum -->
+            <div class="feature-item">
+                <h3>Discussion Forum 💬</h3>
+                <p>Chat with friends, ask questions, and share ideas in our cool community space.</p>
+            </div>
+
+            <!-- Quizzes -->
+            <div class="feature-item">
+                <h3>Quizzes 🎯</h3>
+                <p>Test your brain with fun quizzes! See how much you know and grow smarter every day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-container">
+            <div>
+                <h3>LearnSphere</h3>
+                <p>LearnSphere is an online learning platform offering courses, quizzes, and discussion forums to help you master new skills.</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3>Useful Links</h3>
+                <ul>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#quiz">Quiz Master</a></li>
+                    <li><a href="#discussion">Discussion Forum</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Additional Pages</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Quick Support</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Contact Us</h3>
+                <form class="footer-form" id="footer-contact-form">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <input type="text" name="subject" placeholder="Subject" required>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hero Background Slideshow
+        const backgroundImages = ['home.jpg', 'images/extra/b1.jpg', 'images/extra/b2.jpg', 'images/extra/b3.jpg', 'images/extra/b4.jpg'];
+        let currentImageIndex = 0;
+        function changeBackgroundImage() {
+            const heroSection = document.querySelector('.hero');
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+            heroSection.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+        }
+        setInterval(changeBackgroundImage, 2000);
+
+        // Animation on Scroll
+        const featureItems = document.querySelectorAll('.feature-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 200);
+                }
+            });
+        }, { threshold: 0.2 });
+        featureItems.forEach(item => observer.observe(item));
+
+        // Footer Contact Form Logic
+        document.getElementById('footer-contact-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            alert("Message sent successfully!");
+            event.target.reset();
+        });
+    </script>
+</body>
+</html>

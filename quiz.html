@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master - Home</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Navbar Styles (Copied from About.html) */
+        .navbar {
+            background: linear-gradient(90deg, #06BBCC, #08A0B2);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin: 0 10px;
+        }
+
+        .nav-links a {
+            padding: 8px 12px;
+            color: white;
+            font-weight: 500;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Settings Section (Existing Styles) */
+        .settings {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .settings__select {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .settings__select select, .settings__select input {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .settings__select button {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .settings__select button:hover {
+            background-color: #1565c0;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section (Copied from About.html) -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">LearnSphere 🌟</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="discussion_forum/index.html">Discussion</a></li>
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="quiz.html">Quiz</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Existing Content -->
+    <div class="settings">
+        <span style="font-size: 30px;">Quiz Master</span>
+        <div class="settings__select">
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="numberError" class="error-message" style="display: none;"></div>
+
+            <select id="category" onchange="updateCategory()">
+                <option value="" disabled selected>Select Category</option>
+                <option value="HTML">Html</option>
+                <option value="React">React</option>
+                <option value="CSS">CSS</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Java">Java</option>
+                <option value="C">C</option>
+                <option value="Python">Python</option>
+                <option value="PHP">PHP</option>
+                <option value="SQL">SQL</option>
+                <option value="Next.js">Next.js</option>
+                <option value="MongoDB">MongoDB</option>
+                <option value="DSA">DSA</option>
+            </select>
+
+            <input
+                type="number"
+                id="number"
+                placeholder="Enter No of Questions (1-50)"
+                min="1"
+                max="50"
+                oninput="handleNumberChange()"
+            />
+
+            <select id="difficulty" onchange="updateDifficulty()">
+                <option value="" disabled selected>Select Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+
+            <button onclick="handleSubmit()">Start Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        let category = "";
+        let difficulty = "";
+        let number = "";
+        let error = false;
+        let numberError = "";
+
+        function updateCategory() {
+            category = document.getElementById('category').value;
+        }
+
+        function updateDifficulty() {
+            difficulty = document.getElementById('difficulty').value;
+        }
+
+        function handleNumberChange() {
+            const input = document.getElementById('number');
+            let value = parseInt(input.value);
+            if (value > 50) {
+                numberError = "Please enter a number between 1 and 50";
+                document.getElementById('numberError').textContent = numberError;
+                document.getElementById('numberError').style.display = 'block';
+            } else {
+                numberError = "";
+                document.getElementById('numberError').style.display = 'none';
+            }
+            number = Math.max(1, value);
+            input.value = number;
+        }
+
+        function handleSubmit() {
+            if (!category || !difficulty || !number || numberError) {
+                error = true;
+                document.getElementById('errorMessage').textContent = "Please fill all the fields";
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            error = false;
+            document.getElementById('errorMessage').style.display = 'none';
+
+            sessionStorage.setItem('category', category);
+            sessionStorage.setItem('difficulty', difficulty);
+            sessionStorage.setItem('number', number);
+
+            window.location.href = 'Questions.html';
+        }
+    </script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'925c0731ff3d4517',t:'MTc0Mjg4MDc1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

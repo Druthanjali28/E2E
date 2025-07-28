@@ -1,0 +1,2133 @@
+<!DOCTYPE <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Levels Navigation</title>
+  <style>
+  /* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #f8f9fa; /* Fallback color */
+  color: #333;
+  /* Background image */
+  background: url('https://images.pexels.com/photos/159839/office-home-house-desk-159839.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center/cover;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Navbar Styles */
+.navbar {
+  background: linear-gradient(90deg, #06BBCC, #08A0B2);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  list-style: none !important;
+}
+
+.nav-links li {
+  margin: 0 10px;
+  position: relative;
+}
+
+/* More specific selector to ensure dots are removed */
+.navbar .container nav .nav-links {
+  list-style: none !important;
+}
+
+.navbar .container nav .nav-links li::before,
+.navbar .container nav .nav-links li::after {
+  content: none !important;
+}
+
+.nav-links a {
+  padding: 8px 12px;
+  color: white;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive navbar for smaller screens */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .nav-links li {
+    margin: 5px 0;
+  }
+}
+
+/* Section Styles */
+.section {
+  display: none;
+  min-height: 100vh;
+  padding: 60px 20px; /* Increased padding for breathing room */
+  text-align: center; /* Center all text in section */
+  background: transparent;
+  margin: 20px;
+}
+
+.section.active {
+  display: block;
+}
+
+/* Improve heading readability */
+.section h1 {
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9); /* Stronger shadow */
+  background: rgba(255, 255, 255, 0.7); /* Semi-transparent background for heading */
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+/* Button Styles */
+.navigate-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: block; /* Ensure button is block-level */
+  margin: 20px auto; /* Center the button */
+}
+
+.navigate-btn:hover {
+  background: #0056b3;
+}
+
+/* Grid Styles */
+.courses-grid, .levels-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 courses per row */
+  gap: 20px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+  justify-content: center; /* Center the grid horizontally */
+}
+
+.levels-grid {
+  grid-template-columns: repeat(3, 1fr); /* 3 levels per row for Easy, Intermediate, Hard */
+  text-align: center; /* Center text inside grid items */
+}
+
+.course-item, .level-item {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 40px 0;
+  font-size: 1.3em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #333;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  display: flex; /* Use flexbox to center content */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.course-item:hover, .level-item:hover {
+  background: #00c6ff;
+  color: white !important; /* Ensure text color changes on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: none;
+}
+
+/* Link List Styles */
+.link-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.resource-item {
+  max-width: 300px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #f9f9f9;
+  color: #333;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.resource-item:hover {
+  background: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .courses-grid, .levels-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .section {
+    padding: 40px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .courses-grid, .levels-grid {
+    grid-template-columns: 1fr;
+  }
+  .section {
+    padding: 30px 10px;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">LearnSphere 🌟</div>
+      <nav>
+        <!-- Added inline style as a fallback to remove dots -->
+        <ul class="nav-links" style="list-style: none !important;">
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="courses.html">Courses</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="discussion_forum/index.html">Discussion</a></li>
+          <li><a href="feedback.html">Feedback</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="logout.html">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+  <!-- Rest of the courses.html content remains unchanged -->
+  <div class="section active" id="page-1">
+    <h1>Courses Grid</h1>
+    <div class="courses-grid">
+        <div class="course-item" onclick="showSection('html-levels')">HTML</div>
+        <div class="course-item" onclick="showSection('css-levels')">CSS</div>
+        <div class="course-item" onclick="showSection('javascript-levels')">JavaScript</div>
+        <div class="course-item" onclick="showSection('java-levels')">Java</div>
+        <div class="course-item" onclick="showSection('c-levels')">C</div>
+        <div class="course-item" onclick="showSection('php-levels')">PHP</div>
+        <div class="course-item" onclick="showSection('dsa-levels')">DSA</div>
+        <div class="course-item" onclick="showSection('react-levels')">React</div>
+        <div class="course-item" onclick="showSection('nextjs-levels')">Next.js</div>
+        <div class="course-item" onclick="showSection('sql-levels')">SQL</div>
+        <div class="course-item" onclick="showSection('mongodb-levels')">MongoDB</div>
+        <div class="course-item" onclick="showSection('python-levels')">Python</div>
+    </div>
+    <!-- Add the Redirect button here -->
+    <button class="navigate-btn" onclick="window.location.href='onss/courses.php'">Redirect</button>
+</div>
+  <!-- HTML Level -->
+  <div class="section" id="html-levels">
+    <h1>HTML: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('html-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('html-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('html-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- HTML Easy Level -->
+  <div class="section" id="html-easy">
+    <h1>HTML Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('html-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('html-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('html-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('html-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-easy-mini-videos">
+    <h1>HTML Easy Playlists</h1>
+    <div class="link-list" id="html-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-easy-tutorials">
+    <h1>HTML Easy Tutorials</h1>
+    <div class="link-list" id="html-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-easy-docs">
+    <h1>HTML Easy Documentation</h1>
+    <div class="link-list" id="html-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-easy')">Go Back</button>
+  </div>
+
+  <!-- HTML Intermediate Level -->
+  <div class="section" id="html-intermediate">
+    <h1>HTML Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('html-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('html-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('html-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('html-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-intermediate-mini-videos">
+    <h1>HTML Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="html-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-intermediate-tutorials">
+    <h1>HTML Intermediate Tutorials</h1>
+    <div class="link-list" id="html-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-intermediate-projects">
+    <h1>HTML Intermediate Projects</h1>
+    <div class="link-list" id="html-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-intermediate')">Go Back</button>
+  </div>
+
+  <!-- HTML Hard Level -->
+  <div class="section" id="html-hard">
+    <h1>HTML Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('html-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('html-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('html-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('html-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-hard-mini-videos">
+    <h1>HTML Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="html-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-hard-tutorials">
+    <h1>HTML Hard Advanced Tutorials</h1>
+    <div class="link-list" id="html-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="html-hard-resources">
+    <h1>HTML Hard Resources</h1>
+    <div class="link-list" id="html-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('html-hard')">Go Back</button>
+  </div>
+
+  <!-- CSS Level -->
+  <div class="section" id="css-levels">
+    <h1>CSS: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('css-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('css-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('css-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- CSS Easy Level -->
+  <div class="section" id="css-easy">
+    <h1>CSS Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('css-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('css-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('css-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('css-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-easy-mini-videos">
+    <h1>CSS Easy Playlists</h1>
+    <div class="link-list" id="css-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-easy-tutorials">
+    <h1>CSS Easy Tutorials</h1>
+    <div class="link-list" id="css-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-easy-docs">
+    <h1>CSS Easy Documentation</h1>
+    <div class="link-list" id="css-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-easy')">Go Back</button>
+  </div>
+
+  <!-- CSS Intermediate Level -->
+  <div class="section" id="css-intermediate">
+    <h1>CSS Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('css-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('css-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('css-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('css-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-intermediate-mini-videos">
+    <h1>CSS Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="css-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-intermediate-tutorials">
+    <h1>CSS Intermediate Tutorials</h1>
+    <div class="link-list" id="css-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-intermediate-projects">
+    <h1>CSS Intermediate Projects</h1>
+    <div class="link-list" id="css-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-intermediate')">Go Back</button>
+  </div>
+
+  <!-- CSS Hard Level -->
+  <div class="section" id="css-hard">
+    <h1>CSS Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('css-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('css-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('css-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('css-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-hard-mini-videos">
+    <h1>CSS Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="css-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-hard-tutorials">
+    <h1>CSS Hard Advanced Tutorials</h1>
+    <div class="link-list" id="css-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="css-hard-resources">
+    <h1>CSS Hard Resources</h1>
+    <div class="link-list" id="css-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('css-hard')">Go Back</button>
+  </div>
+
+  <!-- JavaScript Level -->
+  <div class="section" id="javascript-levels">
+    <h1>JavaScript: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('javascript-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('javascript-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('javascript-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- JavaScript Easy Level -->
+  <div class="section" id="javascript-easy">
+    <h1>JavaScript Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('javascript-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('javascript-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('javascript-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('javascript-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-easy-mini-videos">
+    <h1>JavaScript Easy Playlists</h1>
+    <div class="link-list" id="javascript-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-easy-tutorials">
+    <h1>JavaScript Easy Tutorials</h1>
+    <div class="link-list" id="javascript-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-easy-docs">
+    <h1>JavaScript Easy Documentation</h1>
+    <div class="link-list" id="javascript-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-easy')">Go Back</button>
+  </div>
+
+  <!-- JavaScript Intermediate Level -->
+  <div class="section" id="javascript-intermediate">
+    <h1>JavaScript Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('javascript-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('javascript-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('javascript-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('javascript-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-intermediate-mini-videos">
+    <h1>JavaScript Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="javascript-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-intermediate-tutorials">
+    <h1>JavaScript Intermediate Tutorials</h1>
+    <div class="link-list" id="javascript-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-intermediate-projects">
+    <h1>JavaScript Intermediate Projects</h1>
+    <div class="link-list" id="javascript-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-intermediate')">Go Back</button>
+  </div>
+
+  <!-- JavaScript Hard Level -->
+  <div class="section" id="javascript-hard">
+    <h1>JavaScript Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('javascript-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('javascript-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('javascript-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('javascript-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-hard-mini-videos">
+    <h1>JavaScript Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="javascript-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-hard-tutorials">
+    <h1>JavaScript Hard Advanced Tutorials</h1>
+    <div class="link-list" id="javascript-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="javascript-hard-resources">
+    <h1>JavaScript Hard Resources</h1>
+    <div class="link-list" id="javascript-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('javascript-hard')">Go Back</button>
+  </div>
+
+  <!-- Java Level -->
+  <div class="section" id="java-levels">
+    <h1>Java: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('java-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('java-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('java-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- Java Easy Level -->
+  <div class="section" id="java-easy">
+    <h1>Java Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('java-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('java-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('java-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('java-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-easy-mini-videos">
+    <h1>Java Easy Playlists</h1>
+    <div class="link-list" id="java-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-easy-tutorials">
+    <h1>Java Easy Tutorials</h1>
+    <div class="link-list" id="java-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-easy-docs">
+    <h1>Java Easy Documentation</h1>
+    <div class="link-list" id="java-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-easy')">Go Back</button>
+  </div>
+
+  <!-- Java Intermediate Level -->
+  <div class="section" id="java-intermediate">
+    <h1>Java Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('java-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('java-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('java-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('java-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-intermediate-mini-videos">
+    <h1>Java Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="java-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-intermediate-tutorials">
+    <h1>Java Intermediate Tutorials</h1>
+    <div class="link-list" id="java-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-intermediate-projects">
+    <h1>Java Intermediate Projects</h1>
+    <div class="link-list" id="java-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-intermediate')">Go Back</button>
+  </div>
+
+  <!-- Java Hard Level -->
+  <div class="section" id="java-hard">
+    <h1>Java Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('java-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('java-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('java-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('java-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-hard-mini-videos">
+    <h1>Java Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="java-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-hard-tutorials">
+    <h1>Java Hard Advanced Tutorials</h1>
+    <div class="link-list" id="java-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="java-hard-resources">
+    <h1>Java Hard Resources</h1>
+    <div class="link-list" id="java-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('java-hard')">Go Back</button>
+  </div>
+
+  <!-- C Level -->
+  <div class="section" id="c-levels">
+    <h1>C: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('c-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('c-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('c-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- C Easy Level -->
+  <div class="section" id="c-easy">
+    <h1>C Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('c-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('c-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('c-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('c-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-easy-mini-videos">
+    <h1>C Easy Playlists</h1>
+    <div class="link-list" id="c-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-easy-tutorials">
+    <h1>C Easy Tutorials</h1>
+    <div class="link-list" id="c-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-easy-docs">
+    <h1>C Easy Documentation</h1>
+    <div class="link-list" id="c-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-easy')">Go Back</button>
+  </div>
+
+  <!-- C Intermediate Level -->
+  <div class="section" id="c-intermediate">
+    <h1>C Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('c-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('c-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('c-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('c-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-intermediate-mini-videos">
+    <h1>C Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="c-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-intermediate-tutorials">
+    <h1>C Intermediate Tutorials</h1>
+    <div class="link-list" id="c-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-intermediate-projects">
+    <h1>C Intermediate Projects</h1>
+    <div class="link-list" id="c-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-intermediate')">Go Back</button>
+  </div>
+
+  <!-- C Hard Level -->
+  <div class="section" id="c-hard">
+    <h1>C Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('c-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('c-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('c-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('c-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-hard-mini-videos">
+    <h1>C Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="c-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-hard-tutorials">
+    <h1>C Hard Advanced Tutorials</h1>
+    <div class="link-list" id="c-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="c-hard-resources">
+    <h1>C Hard Resources</h1>
+    <div class="link-list" id="c-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('c-hard')">Go Back</button>
+  </div>
+
+  <!-- PHP Level -->
+  <div class="section" id="php-levels">
+    <h1>PHP: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('php-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('php-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('php-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- PHP Easy Level -->
+  <div class="section" id="php-easy">
+    <h1>PHP Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('php-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('php-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('php-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('php-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-easy-mini-videos">
+    <h1>PHP Easy Playlists</h1>
+    <div class="link-list" id="php-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-easy-tutorials">
+    <h1>PHP Easy Tutorials</h1>
+    <div class="link-list" id="php-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-easy-docs">
+    <h1>PHP Easy Documentation</h1>
+    <div class="link-list" id="php-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-easy')">Go Back</button>
+  </div>
+
+  <!-- PHP Intermediate Level -->
+  <div class="section" id="php-intermediate">
+    <h1>PHP Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('php-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('php-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('php-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('php-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-intermediate-mini-videos">
+    <h1>PHP Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="php-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-intermediate-tutorials">
+    <h1>PHP Intermediate Tutorials</h1>
+    <div class="link-list" id="php-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-intermediate-projects">
+    <h1>PHP Intermediate Projects</h1>
+    <div class="link-list" id="php-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-intermediate')">Go Back</button>
+  </div>
+
+  <!-- PHP Hard Level -->
+  <div class="section" id="php-hard">
+    <h1>PHP Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('php-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('php-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('php-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('php-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-hard-mini-videos">
+    <h1>PHP Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="php-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-hard-tutorials">
+    <h1>PHP Hard Advanced Tutorials</h1>
+    <div class="link-list" id="php-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="php-hard-resources">
+    <h1>PHP Hard Resources</h1>
+    <div class="link-list" id="php-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('php-hard')">Go Back</button>
+  </div>
+
+  <!-- DSA Level -->
+  <div class="section" id="dsa-levels">
+    <h1>DSA: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('dsa-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('dsa-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('dsa-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- DSA Easy Level -->
+  <div class="section" id="dsa-easy">
+    <h1>DSA Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('dsa-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('dsa-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('dsa-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('dsa-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-easy-mini-videos">
+    <h1>DSA Easy Playlists</h1>
+    <div class="link-list" id="dsa-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-easy-tutorials">
+    <h1>DSA Easy Tutorials</h1>
+    <div class="link-list" id="dsa-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-easy-docs">
+    <h1>DSA Easy Documentation</h1>
+    <div class="link-list" id="dsa-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-easy')">Go Back</button>
+  </div>
+
+  <!-- DSA Intermediate Level -->
+  <div class="section" id="dsa-intermediate">
+    <h1>DSA Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('dsa-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('dsa-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('dsa-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('dsa-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-intermediate-mini-videos">
+    <h1>DSA Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="dsa-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-intermediate-tutorials">
+    <h1>DSA Intermediate Tutorials</h1>
+    <div class="link-list" id="dsa-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-intermediate-projects">
+    <h1>DSA Intermediate Projects</h1>
+    <div class="link-list" id="dsa-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-intermediate')">Go Back</button>
+  </div>
+
+  <!-- DSA Hard Level -->
+  <div class="section" id="dsa-hard">
+    <h1>DSA Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('dsa-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('dsa-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('dsa-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('dsa-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-hard-mini-videos">
+    <h1>DSA Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="dsa-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-hard-tutorials">
+    <h1>DSA Hard Advanced Tutorials</h1>
+    <div class="link-list" id="dsa-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="dsa-hard-resources">
+    <h1>DSA Hard Resources</h1>
+    <div class="link-list" id="dsa-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('dsa-hard')">Go Back</button>
+  </div>
+
+  <!-- React Level -->
+  <div class="section" id="react-levels">
+    <h1>React: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('react-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('react-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('react-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- React Easy Level -->
+  <div class="section" id="react-easy">
+    <h1>React Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('react-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('react-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('react-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('react-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-easy-mini-videos">
+    <h1>React Easy Playlists</h1>
+    <div class="link-list" id="react-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-easy-tutorials">
+    <h1>React Easy Tutorials</h1>
+    <div class="link-list" id="react-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-easy-docs">
+    <h1>React Easy Documentation</h1>
+    <div class="link-list" id="react-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-easy')">Go Back</button>
+  </div>
+
+  <!-- React Intermediate Level -->
+  <div class="section" id="react-intermediate">
+    <h1>React Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('react-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('react-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('react-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('react-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-intermediate-mini-videos">
+    <h1>React Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="react-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-intermediate-tutorials">
+    <h1>React Intermediate Tutorials</h1>
+    <div class="link-list" id="react-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-intermediate-projects">
+    <h1>React Intermediate Projects</h1>
+    <div class="link-list" id="react-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-intermediate')">Go Back</button>
+  </div>
+
+  <!-- React Hard Level -->
+  <div class="section" id="react-hard">
+    <h1>React Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('react-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('react-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('react-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('react-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-hard-mini-videos">
+    <h1>React Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="react-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-hard-tutorials">
+    <h1>React Hard Advanced Tutorials</h1>
+    <div class="link-list" id="react-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="react-hard-resources">
+    <h1>React Hard Resources</h1>
+    <div class="link-list" id="react-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('react-hard')">Go Back</button>
+  </div>
+
+  <!-- Next.js Level -->
+  <div class="section" id="nextjs-levels">
+    <h1>Next.js: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('nextjs-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('nextjs-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('nextjs-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- Next.js Easy Level -->
+  <div class="section" id="nextjs-easy">
+    <h1>Next.js Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('nextjs-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('nextjs-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('nextjs-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('nextjs-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-easy-mini-videos">
+    <h1>Next.js Easy Playlists</h1>
+    <div class="link-list" id="nextjs-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-easy-tutorials">
+    <h1>Next.js Easy Tutorials</h1>
+    <div class="link-list" id="nextjs-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-easy-docs">
+    <h1>Next.js Easy Documentation</h1>
+    <div class="link-list" id="nextjs-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-easy')">Go Back</button>
+  </div>
+
+  <!-- Next.js Intermediate Level -->
+  <div class="section" id="nextjs-intermediate">
+    <h1>Next.js Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('nextjs-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('nextjs-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('nextjs-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('nextjs-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-intermediate-mini-videos">
+    <h1>Next.js Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="nextjs-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-intermediate-tutorials">
+    <h1>Next.js Intermediate Tutorials</h1>
+    <div class="link-list" id="nextjs-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-intermediate-projects">
+    <h1>Next.js Intermediate Projects</h1>
+    <div class="link-list" id="nextjs-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-intermediate')">Go Back</button>
+  </div>
+
+  <!-- Next.js Hard Level -->
+  <div class="section" id="nextjs-hard">
+    <h1>Next.js Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('nextjs-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('nextjs-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('nextjs-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('nextjs-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-hard-mini-videos">
+    <h1>Next.js Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="nextjs-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-hard-tutorials">
+    <h1>Next.js Hard Advanced Tutorials</h1>
+    <div class="link-list" id="nextjs-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="nextjs-hard-resources">
+    <h1>Next.js Hard Resources</h1>
+    <div class="link-list" id="nextjs-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('nextjs-hard')">Go Back</button>
+  </div>
+
+  <!-- SQL Level -->
+  <div class="section" id="sql-levels">
+    <h1>SQL: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('sql-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('sql-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('sql-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- SQL Easy Level -->
+  <div class="section" id="sql-easy">
+    <h1>SQL Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('sql-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('sql-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('sql-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('sql-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-easy-mini-videos">
+    <h1>SQL Easy Playlists</h1>
+    <div class="link-list" id="sql-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-easy-tutorials">
+    <h1>SQL Easy Tutorials</h1>
+    <div class="link-list" id="sql-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-easy-docs">
+    <h1>SQL Easy Documentation</h1>
+    <div class="link-list" id="sql-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-easy')">Go Back</button>
+  </div>
+
+  <!-- SQL Intermediate Level -->
+  <div class="section" id="sql-intermediate">
+    <h1>SQL Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('sql-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('sql-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('sql-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('sql-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-intermediate-mini-videos">
+    <h1>SQL Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="sql-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-intermediate-tutorials">
+    <h1>SQL Intermediate Tutorials</h1>
+    <div class="link-list" id="sql-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-intermediate-projects">
+    <h1>SQL Intermediate Projects</h1>
+    <div class="link-list" id="sql-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-intermediate')">Go Back</button>
+  </div>
+
+  <!-- SQL Hard Level -->
+  <div class="section" id="sql-hard">
+    <h1>SQL Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('sql-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('sql-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('sql-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('sql-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-hard-mini-videos">
+    <h1>SQL Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="sql-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-hard-tutorials">
+    <h1>SQL Hard Advanced Tutorials</h1>
+    <div class="link-list" id="sql-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="sql-hard-resources">
+    <h1>SQL Hard Resources</h1>
+    <div class="link-list" id="sql-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('sql-hard')">Go Back</button>
+  </div>
+
+  <!-- MongoDB Level -->
+  <div class="section" id="mongodb-levels">
+    <h1>MongoDB: Select a Level</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('mongodb-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('mongodb-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('mongodb-hard')">Hard</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+  </div>
+
+  <!-- MongoDB Easy Level -->
+  <div class="section" id="mongodb-easy">
+    <h1>MongoDB Easy: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('mongodb-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('mongodb-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('mongodb-easy-docs')">Documentation</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('mongodb-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-easy-mini-videos">
+    <h1>MongoDB Easy Playlists</h1>
+    <div class="link-list" id="mongodb-easy-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-easy-tutorials">
+    <h1>MongoDB Easy Tutorials</h1>
+    <div class="link-list" id="mongodb-easy-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-easy')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-easy-docs">
+    <h1>MongoDB Easy Documentation</h1>
+    <div class="link-list" id="mongodb-easy-docs-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-easy')">Go Back</button>
+  </div>
+
+  <!-- MongoDB Intermediate Level -->
+  <div class="section" id="mongodb-intermediate">
+    <h1>MongoDB Intermediate: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('mongodb-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('mongodb-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('mongodb-intermediate-projects')">Projects</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('mongodb-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-intermediate-mini-videos">
+    <h1>MongoDB Intermediate Long Videos (8+ Hours)</h1>
+    <div class="link-list" id="mongodb-intermediate-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-intermediate-tutorials">
+    <h1>MongoDB Intermediate Tutorials</h1>
+    <div class="link-list" id="mongodb-intermediate-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-intermediate')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-intermediate-projects">
+    <h1>MongoDB Intermediate Projects</h1>
+    <div class="link-list" id="mongodb-intermediate-projects-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-intermediate')">Go Back</button>
+  </div>
+
+  <!-- MongoDB Hard Level -->
+  <div class="section" id="mongodb-hard">
+    <h1>MongoDB Hard: Select Content Type</h1>
+    <div class="levels-grid">
+      <div class="level-item" onclick="showSection('mongodb-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('mongodb-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('mongodb-hard-resources')">Resources</div>
+    </div>
+    <button class="navigate-btn" onclick="showSection('mongodb-levels')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-hard-mini-videos">
+    <h1>MongoDB Hard Courses (2 Hours)</h1>
+    <div class="link-list" id="mongodb-hard-mini-videos-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-hard-tutorials">
+    <h1>MongoDB Hard Advanced Tutorials</h1>
+    <div class="link-list" id="mongodb-hard-tutorials-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-hard')">Go Back</button>
+  </div>
+
+  <div class="section" id="mongodb-hard-resources">
+    <h1>MongoDB Hard Resources</h1>
+    <div class="link-list" id="mongodb-hard-resources-list"></div>
+    <button class="navigate-btn" onclick="showSection('mongodb-hard')">Go Back</button>
+  </div>
+
+  <!-- Python Level -->
+  <!-- Python Level -->
+<div class="section" id="python-levels">
+  <h1>Python: Select a Level</h1>
+  <div class="levels-grid">
+      <div class="level-item" onclick="showSection('python-easy')">Easy</div>
+      <div class="level-item" onclick="showSection('python-intermediate')">Intermediate</div>
+      <div class="level-item" onclick="showSection('python-hard')">Hard</div>
+  </div>
+  <button class="navigate-btn" onclick="showSection('page-1')">Go Back</button>
+</div>
+
+<!-- Python Easy Level -->
+<div class="section" id="python-easy">
+  <h1>Python Easy: Select Content Type</h1>
+  <div class="levels-grid">
+      <div class="level-item" onclick="showSection('python-easy-mini-videos')">Playlists</div>
+      <div class="level-item" onclick="showSection('python-easy-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('python-easy-docs')">Documentation</div>
+  </div>
+  <button class="navigate-btn" onclick="showSection('python-levels')">Go Back</button>
+</div>
+
+<div class="section" id="python-easy-mini-videos">
+  <h1>Python Easy Playlists</h1>
+  <div class="link-list" id="python-easy-mini-videos-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-easy')">Go Back</button>
+</div>
+
+<div class="section" id="python-easy-tutorials">
+  <h1>Python Easy Tutorials</h1>
+  <div class="link-list" id="python-easy-tutorials-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-easy')">Go Back</button>
+</div>
+
+<div class="section" id="python-easy-docs">
+  <h1>Python Easy Documentation</h1>
+  <div class="link-list" id="python-easy-docs-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-easy')">Go Back</button>
+</div>
+
+<!-- Python Intermediate Level -->
+<div class="section" id="python-intermediate">
+  <h1>Python Intermediate: Select Content Type</h1>
+  <div class="levels-grid">
+      <div class="level-item" onclick="showSection('python-intermediate-mini-videos')">Long Videos</div>
+      <div class="level-item" onclick="showSection('python-intermediate-tutorials')">Tutorials</div>
+      <div class="level-item" onclick="showSection('python-intermediate-projects')">Projects</div>
+  </div>
+  <button class="navigate-btn" onclick="showSection('python-levels')">Go Back</button>
+</div>
+
+<div class="section" id="python-intermediate-mini-videos">
+  <h1>Python Intermediate Long Videos (8+ Hours)</h1>
+  <div class="link-list" id="python-intermediate-mini-videos-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-intermediate')">Go Back</button>
+</div>
+
+<div class="section" id="python-intermediate-tutorials">
+  <h1>Python Intermediate Tutorials</h1>
+  <div class="link-list" id="python-intermediate-tutorials-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-intermediate')">Go Back</button>
+</div>
+
+<div class="section" id="python-intermediate-projects">
+  <h1>Python Intermediate Projects</h1>
+  <div class="link-list" id="python-intermediate-projects-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-intermediate')">Go Back</button>
+</div>
+
+<!-- Python Hard Level -->
+<div class="section" id="python-hard">
+  <h1>Python Hard: Select Content Type</h1>
+  <div class="levels-grid">
+      <div class="level-item" onclick="showSection('python-hard-mini-videos')">Courses</div>
+      <div class="level-item" onclick="showSection('python-hard-tutorials')">Advanced Tutorials</div>
+      <div class="level-item" onclick="showSection('python-hard-resources')">Resources</div>
+  </div>
+  <button class="navigate-btn" onclick="showSection('python-levels')">Go Back</button>
+</div>
+
+<div class="section" id="python-hard-mini-videos">
+  <h1>Python Hard Courses (2 Hours)</h1>
+  <div class="link-list" id="python-hard-mini-videos-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-hard')">Go Back</button>
+</div>
+
+<div class="section" id="python-hard-tutorials">
+  <h1>Python Hard Advanced Tutorials</h1>
+  <div class="link-list" id="python-hard-tutorials-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-hard')">Go Back</button>
+</div>
+
+<div class="section" id="python-hard-resources">
+  <h1>Python Hard Resources</h1>
+  <div class="link-list" id="python-hard-resources-list"></div>
+  <button class="navigate-btn" onclick="showSection('python-hard')">Go Back</button>
+</div>
+<script>
+  const API_KEY = 'AIzaSyAludNMjJ2OnE3l7Gtyv_JJZ__-1QSkF40'; // Replace with your valid YouTube API key
+
+  let resourceData = {
+    // HTML
+    "html-easy-mini-videos": [], "html-intermediate-mini-videos": [], "html-hard-mini-videos": [],
+   "html-easy-tutorials": [
+  { id: 1, url: "https://www.w3schools.com/html/", short: "W3Schools HTML Tutorial", full: "Beginner-friendly HTML tutorial.", clicks: 0, rank: 0 },
+  { id: 2, url: "https://www.freecodecamp.org/learn/responsive-web-design/", short: "FreeCodeCamp HTML", full: "Basic HTML with responsive design.", clicks: 0, rank: 0 },
+  { id: 3, url: "https://www.codecademy.com/learn/learn-html", short: "Codecademy HTML", full: "Interactive HTML for beginners.", clicks: 0, rank: 0 },
+  { id: 4, url: "https://www.htmldog.com/guides/html/beginner/", short: "HTML Dog Beginner", full: "Simple HTML guide for newbies.", clicks: 0, rank: 0 }
+],
+    "html-intermediate-tutorials": [
+      { id: 1, url: "https://developer.mozilla.org/en-US/docs/Learn/HTML", short: "MDN HTML Guide", full: "Intermediate HTML concepts.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.tutorialrepublic.com/html-tutorial/", short: "Tutorial Republic HTML", full: "Practical HTML lessons.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.sitepoint.com/html-css/", short: "SitePoint HTML", full: "Intermediate HTML and CSS combo.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://learn.shayhowe.com/html-css/", short: "Shay Howe HTML", full: "In-depth HTML for intermediates.", clicks: 0, rank: 0 }
+    ],
+    "html-hard-tutorials": [
+      { id: 1, url: "https://html.spec.whatwg.org/", short: "HTML Living Standard", full: "Advanced HTML specification.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3.org/TR/html52/", short: "W3C HTML 5.2", full: "Detailed HTML5 technical specs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://developer.mozilla.org/en-US/docs/Web/HTML", short: "MDN HTML Reference", full: "Comprehensive HTML advanced guide.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.smashingmagazine.com/category/html/", short: "Smashing Magazine HTML", full: "Expert-level HTML articles.", clicks: 0, rank: 0 }
+    ],
+    "html-intermediate-projects": [
+      { id: 1, url: "https://www.freecodecamp.org/news/html-projects-for-beginners/", short: "FreeCodeCamp HTML Projects", full: "Intermediate HTML projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.theodinproject.com/paths/full-stack-javascript", short: "Odin Project HTML", full: "HTML projects in full-stack context.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://codepen.io/collection/AxLxYZ", short: "CodePen HTML Challenges", full: "Creative intermediate HTML tasks.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.hackerrank.com/domains/html", short: "HackerRank HTML", full: "Practical HTML coding exercises.", clicks: 0, rank: 0 }
+    ],
+    "html-easy-docs": [
+      { id: 1, url: "https://www.w3.org/TR/html5/", short: "W3C HTML5 Docs", full: "Official HTML5 documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element", short: "MDN HTML Elements", full: "Basic HTML element reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.w3schools.com/tags/", short: "W3Schools HTML Tags", full: "Simple HTML tag documentation.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://htmlreference.io/", short: "HTML Reference IO", full: "Easy-to-read HTML docs.", clicks: 0, rank: 0 }
+    ],
+    "html-hard-resources": [
+      { id: 1, url: "https://html.com/", short: "HTML.com Resources", full: "Advanced HTML resources.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://caniuse.com/", short: "Can I Use", full: "HTML/CSS feature support checker.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.w3.org/TR/webarch/", short: "W3C Web Architecture", full: "Deep dive into web standards.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/whatwg/html", short: "WHATWG HTML GitHub", full: "HTML spec source code.", clicks: 0, rank: 0 }
+    ],
+
+    // CSS
+    "css-easy-mini-videos": [], "css-intermediate-mini-videos": [], "css-hard-mini-videos": [],
+    "css-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/css/", short: "W3Schools CSS Tutorial", full: "Beginner CSS tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.freecodecamp.org/learn/responsive-web-design/", short: "FreeCodeCamp CSS", full: "Basic CSS with responsive design.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codecademy.com/learn/learn-css", short: "Codecademy CSS", full: "Interactive CSS for beginners.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://cssbasics.com/", short: "CSS Basics", full: "Simple CSS intro for newbies.", clicks: 0, rank: 0 }
+    ],
+    "css-intermediate-tutorials": [
+      { id: 1, url: "https://css-tricks.com/", short: "CSS-Tricks", full: "Intermediate CSS techniques.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.smashingmagazine.com/category/css/", short: "Smashing Magazine CSS", full: "Practical CSS tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://learn.shayhowe.com/advanced-html-css/", short: "Shay Howe CSS", full: "Intermediate CSS concepts.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.webdesignerdepot.com/category/css/", short: "Webdesigner Depot CSS", full: "Creative CSS guides.", clicks: 0, rank: 0 }
+    ],
+    "css-hard-tutorials": [
+      { id: 1, url: "https://developer.mozilla.org/en-US/docs/Web/CSS", short: "MDN CSS", full: "Advanced CSS reference.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3.org/TR/CSS/", short: "W3C CSS Specs", full: "Official CSS specifications.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://cssreference.io/", short: "CSS Reference IO", full: "Detailed CSS property guide.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://csswizardry.com/", short: "CSS Wizardry", full: "Expert CSS techniques.", clicks: 0, rank: 0 }
+    ],
+    "css-intermediate-projects": [
+      { id: 1, url: "https://www.freecodecamp.org/news/css-projects/", short: "FreeCodeCamp CSS Projects", full: "Intermediate CSS projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://codepen.io/collection/AxLxYZ", short: "CodePen CSS Challenges", full: "Creative CSS tasks.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://cssbattle.dev/", short: "CSS Battle", full: "Competitive CSS coding.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.hackerrank.com/domains/css", short: "HackerRank CSS", full: "Practical CSS exercises.", clicks: 0, rank: 0 }
+    ],
+    "css-easy-docs": [
+      { id: 1, url: "https://www.w3.org/Style/CSS/", short: "W3C CSS Docs", full: "Official CSS documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference", short: "MDN CSS Reference", full: "Basic CSS property docs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.w3schools.com/cssref/", short: "W3Schools CSS Ref", full: "Simple CSS reference.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://cssreference.io/", short: "CSS Reference IO", full: "Easy CSS property guide.", clicks: 0, rank: 0 }
+    ],
+    "css-hard-resources": [
+      { id: 1, url: "https://cssreference.io/", short: "CSS Reference", full: "Comprehensive CSS resource.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://caniuse.com/", short: "Can I Use", full: "CSS feature support checker.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://sass-lang.com/documentation/", short: "Sass Docs", full: "Advanced CSS preprocessing.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/postcss/postcss", short: "PostCSS GitHub", full: "CSS tooling and plugins.", clicks: 0, rank: 0 }
+    ],
+
+    // JavaScript
+    "javascript-easy-mini-videos": [], "javascript-intermediate-mini-videos": [], "javascript-hard-mini-videos": [],
+    "javascript-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/js/", short: "W3Schools JS Tutorial", full: "Beginner JavaScript tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/", short: "FreeCodeCamp JS", full: "Basic JS with algorithms.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codecademy.com/learn/introduction-to-javascript", short: "Codecademy JS", full: "Interactive JS for beginners.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://learnjavascript.online/", short: "Learn JS Online", full: "Simple JS intro course.", clicks: 0, rank: 0 }
+    ],
+    "javascript-intermediate-tutorials": [
+      { id: 1, url: "https://javascript.info/", short: "JavaScript.Info", full: "Intermediate JS concepts.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.theodinproject.com/paths/full-stack-javascript", short: "Odin Project JS", full: "Practical JS in full-stack.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.smashingmagazine.com/category/javascript/", short: "Smashing Magazine JS", full: "Intermediate JS articles.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.sitepoint.com/javascript/", short: "SitePoint JS", full: "Hands-on JS tutorials.", clicks: 0, rank: 0 }
+    ],
+    "javascript-hard-tutorials": [
+      { id: 1, url: "https://eloquentjavascript.net/", short: "Eloquent JavaScript", full: "Advanced JS book online.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide", short: "MDN JS Guide", full: "In-depth JS reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://github.com/getify/You-Dont-Know-JS", short: "You Don’t Know JS", full: "Deep JS book series.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.ecma-international.org/publications-and-standards/standards/ecma-262/", short: "ECMAScript Specs", full: "Official JS standards.", clicks: 0, rank: 0 }
+    ],
+    "javascript-intermediate-projects": [
+      { id: 1, url: "https://www.theodinproject.com/", short: "Odin Project", full: "Intermediate JS projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.freecodecamp.org/news/javascript-projects-for-beginners/", short: "FreeCodeCamp JS Projects", full: "Practical JS tasks.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://codepen.io/collection/AxLxYZ", short: "CodePen JS Challenges", full: "Creative JS projects.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.hackerrank.com/domains/javascript", short: "HackerRank JS", full: "Coding JS exercises.", clicks: 0, rank: 0 }
+    ],
+    "javascript-easy-docs": [
+      { id: 1, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", short: "MDN JS Docs", full: "Official JS documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/jsref/", short: "W3Schools JS Ref", full: "Simple JS reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://javascript.info/intro", short: "JS.Info Intro", full: "Basic JS docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://devdocs.io/javascript/", short: "DevDocs JS", full: "Concise JS documentation.", clicks: 0, rank: 0 }
+    ],
+    "javascript-hard-resources": [
+      { id: 1, url: "https://github.com/getify/You-Dont-Know-JS", short: "You Don’t Know JS", full: "Advanced JS book series.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://v8.dev/docs", short: "V8 Engine Docs", full: "JS engine internals.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://nodejs.org/docs/latest/api/", short: "Node.js Docs", full: "Advanced JS runtime docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.smashingmagazine.com/category/javascript/", short: "Smashing Magazine JS", full: "Expert JS resources.", clicks: 0, rank: 0 }
+    ],
+
+    // Java
+    "java-easy-mini-videos": [], "java-intermediate-mini-videos": [], "java-hard-mini-videos": [],
+    "java-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/java/", short: "W3Schools Java Tutorial", full: "Beginner Java tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codecademy.com/learn/learn-java", short: "Codecademy Java", full: "Interactive Java for beginners.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/java/", short: "TutorialsPoint Java", full: "Simple Java intro.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.learnjavaonline.org/", short: "Learn Java Online", full: "Basic Java lessons.", clicks: 0, rank: 0 }
+    ],
+    "java-intermediate-tutorials": [
+      { id: 1, url: "https://www.baeldung.com/", short: "Baeldung Java", full: "Intermediate Java guides.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.javatpoint.com/java-tutorial", short: "JavaTpoint", full: "Practical Java tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.geeksforgeeks.org/java/", short: "GeeksforGeeks Java", full: "Intermediate Java concepts.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.programiz.com/java-programming", short: "Programiz Java", full: "Hands-on Java lessons.", clicks: 0, rank: 0 }
+    ],
+    "java-hard-tutorials": [
+      { id: 1, url: "https://docs.oracle.com/javase/tutorial/", short: "Oracle Java Tutorial", full: "Advanced Java tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.baeldung.com/java-advanced", short: "Baeldung Advanced", full: "Deep Java topics.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.journaldev.com/java", short: "JournalDev Java", full: "Expert Java guides.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html", short: "Java SE 8 Docs", full: "Advanced Java SE resources.", clicks: 0, rank: 0 }
+    ],
+    "java-intermediate-projects": [
+      { id: 1, url: "https://www.jetbrains.com/academy/", short: "JetBrains Academy", full: "Intermediate Java projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.hackerrank.com/domains/java", short: "HackerRank Java", full: "Practical Java exercises.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codingame.com/learn/java", short: "CodinGame Java", full: "Fun Java coding projects.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.freecodecamp.org/news/java-projects/", short: "FreeCodeCamp Java", full: "Intermediate Java tasks.", clicks: 0, rank: 0 }
+    ],
+    "java-easy-docs": [
+      { id: 1, url: "https://docs.oracle.com/en/java/", short: "Oracle Java Docs", full: "Official Java documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/java/java_ref_keywords.asp", short: "W3Schools Java Ref", full: "Simple Java keyword docs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.javatpoint.com/java-keywords", short: "JavaTpoint Docs", full: "Basic Java reference.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://docs.oracle.com/javase/7/docs/api/", short: "Java 7 API", full: "Beginner-friendly Java API.", clicks: 0, rank: 0 }
+    ],
+    "java-hard-resources": [
+      { id: 1, url: "https://www.java-design-patterns.com/", short: "Java Design Patterns", full: "Advanced Java patterns.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://spring.io/docs", short: "Spring Docs", full: "Advanced Java framework.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.oracle.com/java/technologies/javase-downloads.html", short: "Java SE Downloads", full: "Latest Java SE resources.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/openjdk/jdk", short: "OpenJDK GitHub", full: "Java source code.", clicks: 0, rank: 0 }
+    ],
+
+    // C
+    "c-easy-mini-videos": [], "c-intermediate-mini-videos": [], "c-hard-mini-videos": [],
+    "c-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/c/", short: "W3Schools C Tutorial", full: "Beginner C tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codecademy.com/learn/learn-c", short: "Codecademy C", full: "Interactive C for beginners.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/cprogramming/", short: "TutorialsPoint C", full: "Simple C intro.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.programiz.com/c-programming", short: "Programiz C", full: "Basic C lessons.", clicks: 0, rank: 0 }
+    ],
+    "c-intermediate-tutorials": [
+      { id: 1, url: "https://www.learn-c.org/", short: "Learn-C.org", full: "Intermediate C tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.geeksforgeeks.org/c-programming-language/", short: "GeeksforGeeks C", full: "Practical C concepts.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.cprogramming.com/tutorial.html", short: "CProgramming.com", full: "Intermediate C guides.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.javatpoint.com/c-programming-language-tutorial", short: "JavaTpoint C", full: "Hands-on C lessons.", clicks: 0, rank: 0 }
+    ],
+    "c-hard-tutorials": [
+      { id: 1, url: "https://www.tutorialspoint.com/cprogramming/", short: "TutorialsPoint C", full: "Advanced C programming.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://en.cppreference.com/w/c", short: "C Reference", full: "Detailed C reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.kernel.org/doc/html/latest/", short: "Linux Kernel Docs", full: "C in kernel programming.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.bell-labs.com/usr/dmr/www/chist.html", short: "C History", full: "Advanced C origins.", clicks: 0, rank: 0 }
+    ],
+    "c-intermediate-projects": [
+      { id: 1, url: "https://www.hackerearth.com/practice/", short: "HackerEarth C Projects", full: "Intermediate C projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codingame.com/learn/c", short: "CodinGame C", full: "Fun C coding tasks.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.freecodecamp.org/news/c-projects/", short: "FreeCodeCamp C", full: "Practical C exercises.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/topics/c", short: "GitHub C Projects", full: "Open-source C projects.", clicks: 0, rank: 0 }
+    ],
+    "c-easy-docs": [
+      { id: 1, url: "https://en.cppreference.com/w/c", short: "C Reference", full: "Official C documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/c/c_ref_keywords.php", short: "W3Schools C Ref", full: "Simple C keyword docs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/cprogramming/c_quick_guide.htm", short: "TutorialsPoint C Guide", full: "Basic C reference.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://devdocs.io/c/", short: "DevDocs C", full: "Concise C documentation.", clicks: 0, rank: 0 }
+    ],
+    "c-hard-resources": [
+      { id: 1, url: "https://www.kernel.org/doc/html/latest/", short: "Linux Kernel Docs", full: "Advanced C in kernel dev.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.open-std.org/jtc1/sc22/wg14/", short: "C Standards", full: "Official C standard docs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://github.com/torvalds/linux", short: "Linux GitHub", full: "C in Linux source code.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.bell-labs.com/usr/dmr/www/", short: "Dennis Ritchie", full: "C creator’s resources.", clicks: 0, rank: 0 }
+    ],
+
+    // PHP
+    "php-easy-mini-videos": [], "php-intermediate-mini-videos": [], "php-hard-mini-videos": [],
+    "php-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/php/", short: "W3Schools PHP Tutorial", full: "Beginner PHP tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codecademy.com/learn/learn-php", short: "Codecademy PHP", full: "Interactive PHP for beginners.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/php/", short: "TutorialsPoint PHP", full: "Simple PHP intro.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.php101.com/", short: "PHP 101", full: "Basic PHP lessons.", clicks: 0, rank: 0 }
+    ],
+    "php-intermediate-tutorials": [
+      { id: 1, url: "https://phptherightway.com/", short: "PHP The Right Way", full: "Intermediate PHP best practices.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.sitepoint.com/php/", short: "SitePoint PHP", full: "Practical PHP tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.geeksforgeeks.org/php-tutorials/", short: "GeeksforGeeks PHP", full: "Intermediate PHP guides.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.javatpoint.com/php-tutorial", short: "JavaTpoint PHP", full: "Hands-on PHP lessons.", clicks: 0, rank: 0 }
+    ],
+    "php-hard-tutorials": [
+      { id: 1, url: "https://www.php.net/manual/en/", short: "PHP Manual", full: "Advanced PHP documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://laravel.com/docs", short: "Laravel Docs", full: "Advanced PHP framework guide.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.smashingmagazine.com/category/php/", short: "Smashing Magazine PHP", full: "Expert PHP articles.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.php-fig.org/psr/", short: "PHP-FIG PSR", full: "PHP coding standards.", clicks: 0, rank: 0 }
+    ],
+    "php-intermediate-projects": [
+      { id: 1, url: "https://www.sitepoint.com/php-projects/", short: "SitePoint PHP Projects", full: "Intermediate PHP projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.hackerrank.com/domains/php", short: "HackerRank PHP", full: "Practical PHP exercises.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codingame.com/learn/php", short: "CodinGame PHP", full: "Fun PHP coding tasks.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/topics/php", short: "GitHub PHP Projects", full: "Open-source PHP projects.", clicks: 0, rank: 0 }
+    ],
+    "php-easy-docs": [
+      { id: 1, url: "https://www.php.net/docs.php", short: "PHP Docs", full: "Official PHP documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/php/php_ref_array.asp", short: "W3Schools PHP Ref", full: "Simple PHP reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/php/php_quick_guide.htm", short: "TutorialsPoint PHP Guide", full: "Basic PHP docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://devdocs.io/php/", short: "DevDocs PHP", full: "Concise PHP documentation.", clicks: 0, rank: 0 }
+    ],
+    "php-hard-resources": [
+      { id: 1, url: "https://laravel.com/docs", short: "Laravel Docs", full: "Advanced PHP framework resources.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://symfony.com/doc/current/", short: "Symfony Docs", full: "Advanced PHP framework.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://github.com/php/php-src", short: "PHP Source GitHub", full: "PHP internals source.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.php.net/downloads.php", short: "PHP Downloads", full: "Latest PHP resources.", clicks: 0, rank: 0 }
+    ],
+
+    // DSA
+    "dsa-easy-mini-videos": [], "dsa-intermediate-mini-videos": [], "dsa-hard-mini-videos": [],
+    "dsa-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/dsa/", short: "W3Schools DSA Tutorial", full: "Beginner DSA tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.programiz.com/dsa", short: "Programiz DSA", full: "Simple DSA lessons.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/data_structures_algorithms/", short: "TutorialsPoint DSA", full: "Basic DSA intro.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.freecodecamp.org/learn/data-structures/", short: "FreeCodeCamp DSA", full: "Beginner DSA course.", clicks: 0, rank: 0 }
+    ],
+    "dsa-intermediate-tutorials": [
+      { id: 1, url: "https://www.geeksforgeeks.org/data-structures/", short: "GeeksforGeeks DSA", full: "Intermediate DSA guide.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.hackerearth.com/practice/data-structures/", short: "HackerEarth DSA", full: "Practical DSA tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.javatpoint.com/data-structure-tutorial", short: "JavaTpoint DSA", full: "Intermediate DSA lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.codingninjas.com/codestudio/data-structures", short: "Coding Ninjas DSA", full: "Hands-on DSA guides.", clicks: 0, rank: 0 }
+    ],
+    "dsa-hard-tutorials": [
+      { id: 1, url: "https://cp-algorithms.com/", short: "CP Algorithms", full: "Advanced DSA for competitive programming.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.topcoder.com/community/competitive-programming/tutorials/", short: "TopCoder DSA", full: "Expert DSA tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://leetcode.com/explore/learn/", short: "LeetCode Learn", full: "Advanced DSA lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.algoexpert.io/data-structures", short: "AlgoExpert DSA", full: "Deep DSA concepts.", clicks: 0, rank: 0 }
+    ],
+    "dsa-intermediate-projects": [
+      { id: 1, url: "https://www.hackerrank.com/domains/data-structures", short: "HackerRank DSA", full: "Intermediate DSA projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codingame.com/learn/data-structures", short: "CodinGame DSA", full: "Fun DSA challenges.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.freecodecamp.org/news/data-structures-projects/", short: "FreeCodeCamp DSA", full: "Practical DSA tasks.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/topics/data-structures", short: "GitHub DSA Projects", full: "Open-source DSA projects.", clicks: 0, rank: 0 }
+    ],
+    "dsa-easy-docs": [
+      { id: 1, url: "https://www.tutorialspoint.com/data_structures_algorithms/", short: "TutorialsPoint DSA", full: "Basic DSA docs.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/dsa/dsa_intro.php", short: "W3Schools DSA Intro", full: "Simple DSA reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.geeksforgeeks.org/data-structures/", short: "GeeksforGeeks DSA Docs", full: "Beginner DSA guide.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.programiz.com/dsa/data-structure-types", short: "Programiz DSA Types", full: "Basic DSA types docs.", clicks: 0, rank: 0 }
+    ],
+    "dsa-hard-resources": [
+      { id: 1, url: "https://leetcode.com/", short: "LeetCode", full: "Advanced DSA practice.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codeforces.com/", short: "Codeforces", full: "Competitive DSA platform.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.geeksforgeeks.org/advanced-data-structures/", short: "GeeksforGeeks Advanced", full: "Deep DSA topics.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.hackerearth.com/practice/algorithms/", short: "HackerEarth Algorithms", full: "Advanced DSA resources.", clicks: 0, rank: 0 }
+    ],
+
+    // React
+    "react-easy-mini-videos": [], "react-intermediate-mini-videos": [], "react-hard-mini-videos": [],
+    "react-easy-tutorials": [
+      { id: 1, url: "https://reactjs.org/tutorial/", short: "React Official Tutorial", full: "Beginner React tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/react/", short: "W3Schools React", full: "Simple React intro.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codecademy.com/learn/react-101", short: "Codecademy React", full: "Interactive React basics.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.freecodecamp.org/learn/front-end-libraries/react/", short: "FreeCodeCamp React", full: "Beginner React course.", clicks: 0, rank: 0 }
+    ],
+    "react-intermediate-tutorials": [
+      { id: 1, url: "https://www.robinwieruch.de/react-tutorials/", short: "Robin Wieruch React", full: "Intermediate React tutorials.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.smashingmagazine.com/category/react/", short: "Smashing Magazine React", full: "Practical React guides.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.sitepoint.com/react/", short: "SitePoint React", full: "Hands-on React lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://egghead.io/courses/the-beginner-s-guide-to-react", short: "Egghead React", full: "Intermediate React course.", clicks: 0, rank: 0 }
+    ],
+    "react-hard-tutorials": [
+      { id: 1, url: "https://overreacted.io/", short: "Overreacted", full: "Advanced React insights by Dan Abramov.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://reactjs.org/docs/hooks-reference.html", short: "React Hooks Docs", full: "Deep dive into React Hooks.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.reactpatterns.com/", short: "React Patterns", full: "Advanced React design patterns.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/facebook/react", short: "React GitHub", full: "React source code study.", clicks: 0, rank: 0 }
+    ],
+    "react-intermediate-projects": [
+      { id: 1, url: "https://www.freecodecamp.org/news/react-projects/", short: "FreeCodeCamp React Projects", full: "Intermediate React projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.theodinproject.com/paths/full-stack-javascript", short: "Odin Project React", full: "React in full-stack projects.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://codepen.io/collection/AxLxYZ", short: "CodePen React Challenges", full: "Creative React tasks.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.hackerrank.com/domains/tutorials/10-days-of-react", short: "HackerRank React", full: "Practical React exercises.", clicks: 0, rank: 0 }
+    ],
+    "react-easy-docs": [
+      { id: 1, url: "https://reactjs.org/docs/", short: "React Docs", full: "Official React documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/react/react_components.asp", short: "W3Schools React Ref", full: "Simple React component docs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://devdocs.io/react/", short: "DevDocs React", full: "Concise React docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://reactjs.org/docs/getting-started.html", short: "React Getting Started", full: "Basic React guide.", clicks: 0, rank: 0 }
+    ],
+    "react-hard-resources": [
+      { id: 1, url: "https://github.com/reduxjs/redux", short: "Redux Docs", full: "Advanced state management for React.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://reactrouter.com/web/guides/quick-start", short: "React Router Docs", full: "Advanced routing in React.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.apollographql.com/docs/react/", short: "Apollo GraphQL Docs", full: "GraphQL with React.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/facebook/react", short: "React GitHub", full: "React source and examples.", clicks: 0, rank: 0 }
+    ],
+
+    // Next.js
+    "nextjs-easy-mini-videos": [], "nextjs-intermediate-mini-videos": [], "nextjs-hard-mini-videos": [],
+    "nextjs-easy-tutorials": [
+      { id: 1, url: "https://nextjs.org/learn/", short: "Next.js Learn", full: "Beginner Next.js tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/nextjs/", short: "W3Schools Next.js", full: "Simple Next.js intro.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codecademy.com/learn/learn-nextjs", short: "Codecademy Next.js", full: "Interactive Next.js basics.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.freecodecamp.org/news/learn-next-js/", short: "FreeCodeCamp Next.js", full: "Beginner Next.js guide.", clicks: 0, rank: 0 }
+    ],
+    "nextjs-intermediate-tutorials": [
+      { id: 1, url: "https://www.netlify.com/blog/nextjs-tutorials/", short: "Netlify Next.js", full: "Intermediate Next.js guides.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.smashingmagazine.com/category/next-js/", short: "Smashing Magazine Next.js", full: "Practical Next.js tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.sitepoint.com/next-js/", short: "SitePoint Next.js", full: "Hands-on Next.js lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://egghead.io/courses/up-and-running-with-next-js", short: "Egghead Next.js", full: "Intermediate Next.js course.", clicks: 0, rank: 0 }
+    ],
+    "nextjs-hard-tutorials": [
+      { id: 1, url: "https://masteringnextjs.com/", short: "Mastering Next.js", full: "Advanced Next.js course.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://nextjs.org/docs/advanced-features", short: "Next.js Advanced Docs", full: "Deep Next.js features.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://vercel.com/blog", short: "Vercel Blog", full: "Expert Next.js insights.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/vercel/next.js", short: "Next.js GitHub", full: "Next.js source study.", clicks: 0, rank: 0 }
+    ],
+    "nextjs-intermediate-projects": [
+      { id: 1, url: "https://vercel.com/guides", short: "Vercel Guides", full: "Intermediate Next.js projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.freecodecamp.org/news/nextjs-projects/", short: "FreeCodeCamp Next.js", full: "Practical Next.js tasks.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://github.com/topics/nextjs", short: "GitHub Next.js Projects", full: "Open-source Next.js projects.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.hackerrank.com/domains/tutorials/nextjs", short: "HackerRank Next.js", full: "Next.js coding exercises.", clicks: 0, rank: 0 }
+    ],
+    "nextjs-easy-docs": [
+      { id: 1, url: "https://nextjs.org/docs/", short: "Next.js Docs", full: "Official Next.js documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/nextjs/nextjs_ref_components.asp", short: "W3Schools Next.js Ref", full: "Simple Next.js reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://devdocs.io/next/", short: "DevDocs Next.js", full: "Concise Next.js docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://nextjs.org/docs/getting-started", short: "Next.js Getting Started", full: "Basic Next.js guide.", clicks: 0, rank: 0 }
+    ],
+    "nextjs-hard-resources": [
+      { id: 1, url: "https://github.com/vercel/next.js/", short: "Next.js GitHub", full: "Advanced Next.js source and examples.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://vercel.com/docs", short: "Vercel Docs", full: "Advanced deployment with Next.js.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.apollographql.com/docs/react/integrations/next/", short: "Apollo Next.js", full: "GraphQL with Next.js.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://nextjs.org/conf", short: "Next.js Conf", full: "Expert Next.js talks.", clicks: 0, rank: 0 }
+    ],
+
+    // SQL
+    "sql-easy-mini-videos": [], "sql-intermediate-mini-videos": [], "sql-hard-mini-videos": [],
+    "sql-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/sql/", short: "W3Schools SQL Tutorial", full: "Beginner SQL tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codecademy.com/learn/learn-sql", short: "Codecademy SQL", full: "Interactive SQL basics.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/sql/", short: "TutorialsPoint SQL", full: "Simple SQL intro.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.programiz.com/sql", short: "Programiz SQL", full: "Basic SQL lessons.", clicks: 0, rank: 0 }
+    ],
+    "sql-intermediate-tutorials": [
+      { id: 1, url: "https://www.sqlcourse.com/", short: "SQLCourse", full: "Intermediate SQL lessons.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.geeksforgeeks.org/sql-tutorial/", short: "GeeksforGeeks SQL", full: "Practical SQL guides.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.javatpoint.com/sql-tutorial", short: "JavaTpoint SQL", full: "Intermediate SQL concepts.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.sqlzoo.net/", short: "SQL Zoo", full: "Hands-on SQL tutorials.", clicks: 0, rank: 0 }
+    ],
+    "sql-hard-tutorials": [
+      { id: 1, url: "https://www.postgresql.org/docs/", short: "PostgreSQL Docs", full: "Advanced SQL with PostgreSQL.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://dev.mysql.com/doc/refman/8.0/en/", short: "MySQL 8.0 Docs", full: "Deep SQL in MySQL.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.sqlite.org/docs.html", short: "SQLite Docs", full: "Advanced SQL in SQLite.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://use-the-index-luke.com/", short: "Use The Index, Luke", full: "Expert SQL optimization.", clicks: 0, rank: 0 }
+    ],
+    "sql-intermediate-projects": [
+      { id: 1, url: "https://www.hackerearth.com/practice/sql/", short: "HackerRank SQL", full: "Intermediate SQL projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codingame.com/learn/sql", short: "CodinGame SQL", full: "Fun SQL challenges.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.freecodecamp.org/news/sql-projects/", short: "FreeCodeCamp SQL", full: "Practical SQL tasks.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/topics/sql", short: "GitHub SQL Projects", full: "Open-source SQL projects.", clicks: 0, rank: 0 }
+    ],
+    "sql-easy-docs": [
+      { id: 1, url: "https://dev.mysql.com/doc/", short: "MySQL Docs", full: "Official MySQL documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/sql/sql_ref_keywords.asp", short: "W3Schools SQL Ref", full: "Simple SQL reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/sql/sql_quick_guide.htm", short: "TutorialsPoint SQL Guide", full: "Basic SQL docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://devdocs.io/sql/", short: "DevDocs SQL", full: "Concise SQL documentation.", clicks: 0, rank: 0 }
+    ],
+    "sql-hard-resources": [
+      { id: 1, url: "https://use-the-index-luke.com/", short: "Use The Index, Luke", full: "Advanced SQL optimization.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.postgresql.org/docs/current/index.html", short: "PostgreSQL Current Docs", full: "Latest PostgreSQL SQL.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.oracle.com/database/technologies/", short: "Oracle SQL Docs", full: "Advanced SQL in Oracle.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.sqlservercentral.com/", short: "SQL Server Central", full: "Expert SQL Server resources.", clicks: 0, rank: 0 }
+    ],
+
+    // MongoDB
+    "mongodb-easy-mini-videos": [], "mongodb-intermediate-mini-videos": [], "mongodb-hard-mini-videos": [],
+    "mongodb-easy-tutorials": [
+      { id: 1, url: "https://www.mongodb.com/basics", short: "MongoDB Basics", full: "Beginner MongoDB tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/mongodb/", short: "W3Schools MongoDB", full: "Simple MongoDB intro.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/mongodb/", short: "TutorialsPoint MongoDB", full: "Basic MongoDB lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.freecodecamp.org/learn/back-end-development-and-apis/mongodb/", short: "FreeCodeCamp MongoDB", full: "Beginner MongoDB course.", clicks: 0, rank: 0 }
+    ],
+    "mongodb-intermediate-tutorials": [
+      { id: 1, url: "https://www.tutorialspoint.com/mongodb/", short: "TutorialsPoint MongoDB", full: "Intermediate MongoDB guide.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.geeksforgeeks.org/mongodb-tutorial/", short: "GeeksforGeeks MongoDB", full: "Practical MongoDB tutorials.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.javatpoint.com/mongodb-tutorial", short: "JavaTpoint MongoDB", full: "Intermediate MongoDB lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://university.mongodb.com/", short: "MongoDB University", full: "Hands-on MongoDB courses.", clicks: 0, rank: 0 }
+    ],
+    "mongodb-hard-tutorials": [
+      { id: 1, url: "https://docs.mongodb.com/manual/", short: "MongoDB Manual", full: "Advanced MongoDB documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.mongodb.com/developer/", short: "MongoDB Developer", full: "Expert MongoDB articles.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.mongodb.com/atlas", short: "MongoDB Atlas Docs", full: "Advanced cloud MongoDB.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/mongodb/mongo", short: "MongoDB GitHub", full: "MongoDB source study.", clicks: 0, rank: 0 }
+    ],
+    "mongodb-intermediate-projects": [
+      { id: 1, url: "https://www.freecodecamp.org/news/mongodb-projects/", short: "FreeCodeCamp MongoDB", full: "Intermediate MongoDB projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.hackerrank.com/domains/tutorials/mongodb", short: "HackerRank MongoDB", full: "Practical MongoDB exercises.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codingame.com/learn/mongodb", short: "CodinGame MongoDB", full: "Fun MongoDB tasks.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://github.com/topics/mongodb", short: "GitHub MongoDB Projects", full: "Open-source MongoDB projects.", clicks: 0, rank: 0 }
+    ],
+    "mongodb-easy-docs": [
+      { id: 1, url: "https://www.mongodb.com/docs/", short: "MongoDB Docs", full: "Official MongoDB documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/mongodb/mongodb_ref_commands.asp", short: "W3Schools MongoDB Ref", full: "Simple MongoDB reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/mongodb/mongodb_quick_guide.htm", short: "TutorialsPoint MongoDB Guide", full: "Basic MongoDB docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://devdocs.io/mongodb/", short: "DevDocs MongoDB", full: "Concise MongoDB documentation.", clicks: 0, rank: 0 }
+    ],
+    "mongodb-hard-resources": [
+      { id: 1, url: "https://university.mongodb.com/", short: "MongoDB University", full: "Advanced MongoDB courses.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.mongodb.com/docs/drivers/", short: "MongoDB Drivers", full: "Advanced driver docs.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://github.com/mongodb/mongo", short: "MongoDB GitHub", full: "MongoDB source and examples.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.mongodb.com/community", short: "MongoDB Community", full: "Expert MongoDB resources.", clicks: 0, rank: 0 }
+    ],
+
+    // Python
+    "python-easy-mini-videos": [], "python-intermediate-mini-videos": [], "python-hard-mini-videos": [],
+    "python-easy-tutorials": [
+      { id: 1, url: "https://www.w3schools.com/python/", short: "W3Schools Python Tutorial", full: "Beginner Python tutorial.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.codecademy.com/learn/learn-python-3", short: "Codecademy Python", full: "Interactive Python basics.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/python/", short: "TutorialsPoint Python", full: "Simple Python intro.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.programiz.com/python-programming", short: "Programiz Python", full: "Basic Python lessons.", clicks: 0, rank: 0 }
+    ],
+    "python-intermediate-tutorials": [
+      { id: 1, url: "https://realpython.com/", short: "Real Python", full: "Intermediate Python tutorials.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.geeksforgeeks.org/python-programming-language/", short: "GeeksforGeeks Python", full: "Practical Python guides.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.javatpoint.com/python-tutorial", short: "JavaTpoint Python", full: "Intermediate Python lessons.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.learnpython.org/", short: "LearnPython.org", full: "Hands-on Python tutorials.", clicks: 0, rank: 0 }
+    ],
+    "python-hard-tutorials": [
+      { id: 1, url: "https://docs.python.org/3/", short: "Python Docs", full: "Advanced Python documentation.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.python.org/dev/peps/", short: "Python PEPs", full: "Python Enhancement Proposals.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://realpython.com/advanced-python/", short: "Real Python Advanced", full: "Deep Python topics.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.fullstackpython.com/", short: "Full Stack Python", full: "Expert Python guides.", clicks: 0, rank: 0 }
+    ],
+    "python-intermediate-projects": [
+      { id: 1, url: "https://www.theodinproject.com/", short: "Odin Project Python", full: "Intermediate Python projects.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.hackerrank.com/domains/python", short: "HackerRank Python", full: "Practical Python exercises.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.codingame.com/learn/python", short: "CodinGame Python", full: "Fun Python challenges.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://www.freecodecamp.org/news/python-projects-for-beginners/", short: "FreeCodeCamp Python", full: "Intermediate Python tasks.", clicks: 0, rank: 0 }
+    ],
+    "python-easy-docs": [
+      { id: 1, url: "https://docs.python.org/3/tutorial/", short: "Python Tutorial", full: "Official Python beginner docs.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.w3schools.com/python/python_ref_functions.asp", short: "W3Schools Python Ref", full: "Simple Python reference.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://www.tutorialspoint.com/python/python_quick_guide.htm", short: "TutorialsPoint Python Guide", full: "Basic Python docs.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://devdocs.io/python/", short: "DevDocs Python", full: "Concise Python documentation.", clicks: 0, rank: 0 }
+    ],
+    "python-hard-resources": [
+      { id: 1, url: "https://peps.python.org/", short: "Python PEPs", full: "Python Enhancement Proposals.", clicks: 0, rank: 0 },
+      { id: 2, url: "https://www.python.org/downloads/source/", short: "Python Source", full: "Python source code.", clicks: 0, rank: 0 },
+      { id: 3, url: "https://numpy.org/doc/stable/", short: "NumPy Docs", full: "Advanced Python data science.", clicks: 0, rank: 0 },
+      { id: 4, url: "https://pandas.pydata.org/docs/", short: "Pandas Docs", full: "Advanced Python data analysis.", clicks: 0, rank: 0 }
+    ]
+};
+
+  let pageTokens = {}; // For video pagination
+  let staticPageCounters = {}; // For non-video pagination
+
+  function loadFromStorage() {
+    const storedData = localStorage.getItem('resourceData');
+    if (storedData) resourceData = JSON.parse(storedData);
+    const storedTokens = localStorage.getItem('pageTokens');
+    if (storedTokens) pageTokens = JSON.parse(storedTokens);
+    const storedCounters = localStorage.getItem('staticPageCounters');
+    if (storedCounters) staticPageCounters = JSON.parse(storedCounters);
+  }
+
+  function saveToStorage() {
+    localStorage.setItem('resourceData', JSON.stringify(resourceData));
+    localStorage.setItem('pageTokens', JSON.stringify(pageTokens));
+    localStorage.setItem('staticPageCounters', JSON.stringify(staticPageCounters));
+  }
+
+  async function fetchVideos(sectionId, pageToken = '') {
+    console.log(`Fetching videos for: ${sectionId}${pageToken ? ` (pageToken: ${pageToken})` : ''}`);
+    const course = sectionId.split('-')[0];
+    const level = sectionId.split('-')[1];
+    let query, type, videoDuration;
+
+    if (level === "easy") {
+      query = `${course} tutorial playlist beginner`;
+      type = "playlist";
+    } else if (level === "intermediate") {
+      query = `${course} tutorial intermediate long`;
+      type = "video";
+      videoDuration = "long";
+    } else if (level === "hard") {
+      query = `${course} tutorial advanced`;
+      type = "video";
+      videoDuration = "medium";
+    }
+
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=${type}${videoDuration ? `&videoDuration=${videoDuration}` : ''}&maxResults=50${pageToken ? `&pageToken=${pageToken}` : ''}&key=${API_KEY}`;
+    console.log(`API URL: ${url}`);
+
+    try {
+      const response = await fetch(url);
+      console.log(`Response status: ${response.status}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
+      }
+      const data = await response.json();
+      console.log(`API response:`, data);
+
+      if (data.items && data.items.length > 0) {
+        const newVideos = data.items.map((item, index) => {
+          const id = type === "playlist" ? item.id.playlistId : item.id.videoId;
+          const url = type === "playlist" ? `https://www.youtube.com/playlist?list=${id}` : `https://www.youtube.com/watch?v=${id}`;
+          return {
+            id: (resourceData[sectionId].length + index + 1),
+            url: url,
+            thumbnail: item.snippet.thumbnails?.high?.url || "https://via.placeholder.com/300x200",
+            short: item.snippet.title.slice(0, 50) + (item.snippet.title.length > 50 ? "..." : ""),
+            full: item.snippet.description || "No description available.",
+            clicks: 0,
+            rank: 0
+          };
+        });
+        resourceData[sectionId] = pageToken ? [...resourceData[sectionId], ...newVideos] : newVideos;
+        pageTokens[sectionId] = data.nextPageToken || '';
+        console.log(`Fetched ${newVideos.length} items for ${sectionId}, Total: ${resourceData[sectionId].length}`);
+      } else {
+        console.warn(`No items returned for ${sectionId}. Response:`, data);
+        if (!pageToken) {
+          resourceData[sectionId] = [{ id: 1, url: "#", short: "No videos found", full: "Try again later or check API quota", clicks: 0, rank: 0 }];
+        }
+        pageTokens[sectionId] = '';
+      }
+    } catch (error) {
+      console.error(`Error fetching videos for ${sectionId}:`, error);
+      if (!pageToken) {
+        resourceData[sectionId] = [{ id: 1, url: "#", short: "Failed to load videos", full: `Error: ${error.message}`, clicks: 0, rank: 0 }];
+      }
+      pageTokens[sectionId] = '';
+    }
+    saveToStorage();
+    return resourceData[sectionId];
+  }
+
+  async function fetchNonVideoContent(sectionId) {
+    const course = sectionId.split('-')[0];
+    const level = sectionId.split('-')[1];
+    const type = sectionId.split('-')[2];
+    const counter = (staticPageCounters[sectionId] || 0) + 1;
+    staticPageCounters[sectionId] = counter;
+
+    const newContent = [
+      {
+        id: resourceData[sectionId].length + 1,
+        url: `https://example.com/${course}-${level}-${type}-${counter}`,
+        short: `${course} ${level} ${type} (More ${counter})`,
+        full: `Additional ${type} content for ${course} (${level}) - Page ${counter}`,
+        clicks: 0,
+        rank: 0
+      }
+    ];
+    resourceData[sectionId] = [...resourceData[sectionId], ...newContent];
+    saveToStorage();
+    return resourceData[sectionId];
+  }
+
+  async function renderResources(sectionId) {
+    const resourceList = document.getElementById(`${sectionId}-list`);
+    if (!resourceList) {
+      console.error(`No element found for ${sectionId}-list`);
+      return;
+    }
+
+    resourceList.innerHTML = "<p>Loading...</p>";
+
+    // Fetch initial content if empty
+    if (!resourceData[sectionId] || resourceData[sectionId].length === 0) {
+      if (sectionId.includes("mini-videos")) {
+        await fetchVideos(sectionId);
+      } else {
+        if (!resourceData[sectionId]) {
+          resourceData[sectionId] = [];
+        }
+        if (resourceData[sectionId].length === 0) {
+          const course = sectionId.split('-')[0];
+          const level = sectionId.split('-')[1];
+          const type = sectionId.split('-')[2];
+          resourceData[sectionId].push({
+            id: 1,
+            url: `https://example.com/${course}-${level}-${type}`,
+            short: `${course} ${level} ${type} (Default)`,
+            full: `Default ${type} entry for ${course} (${level})`,
+            clicks: 0,
+            rank: 0
+          });
+          saveToStorage();
+        }
+      }
+    }
+
+    const resources = resourceData[sectionId] || [];
+    if (resources.length === 0) {
+      resourceList.innerHTML = "<p>No resources available</p>";
+      return;
+    }
+
+    // Sort resources by clicks in descending order
+    resources.sort((a, b) => b.clicks - a.clicks);
+
+    // Save the sorted order to resourceData and localStorage
+    resourceData[sectionId] = resources;
+    saveToStorage();
+
+    resourceList.innerHTML = "";
+    resources.forEach(res => {
+      const resourceItem = document.createElement("div");
+      resourceItem.className = "resource-item";
+      resourceItem.innerHTML = `
+        <a href="${res.url}" target="_blank" onclick="increaseCount(event, '${sectionId}', ${res.id})">
+          ${res.thumbnail ? `<img src="${res.thumbnail}" alt="Thumbnail" style="width: 100%; border-radius: 8px;">` : res.short}
+        </a>
+        <p id="${sectionId}-content-${res.id}">${res.short}</p>
+        <button onclick="toggleContent('${sectionId}', ${res.id})">View More</button>
+        <span>Clicks: <span id="${sectionId}-count-${res.id}">${res.clicks}</span></span>
+      `;
+      resourceList.appendChild(resourceItem);
+    });
+  }
+
+  function toggleContent(sectionId, id) {
+    const content = document.getElementById(`${sectionId}-content-${id}`);
+    const button = document.querySelector(`#${sectionId}-list button[onclick*="${id}"]`);
+    if (!content || !button) return;
+    const resource = resourceData[sectionId].find(r => r.id === id);
+    if (button.innerText === "View More") {
+      content.innerText = resource.full;
+      button.innerText = "View Less";
+    } else {
+      content.innerText = resource.short;
+      button.innerText = "View More";
+    }
+  }
+
+  function increaseCount(event, sectionId, id) {
+    event.preventDefault();
+    const resources = resourceData[sectionId];
+    const resource = resources.find(r => r.id === id);
+    if (resource) {
+      resource.clicks += 1;
+      saveToStorage();
+      renderResources(sectionId); // Re-render with updated order
+      window.open(resource.url, '_blank');
+    }
+  }
+
+  function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(section => {
+      section.classList.remove('active');
+    });
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.classList.add('active');
+      if (sectionId.includes("mini-videos") || sectionId.includes("tutorials") || sectionId.includes("projects") || sectionId.includes("docs") || sectionId.includes("resources")) {
+        renderResources(sectionId);
+      }
+    }
+  }
+
+  loadFromStorage();
+  showSection('page-1');
+</script>

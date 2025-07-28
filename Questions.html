@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master</title>
+    <link rel="stylesheet" href="Questions.css">
+    <style>
+        .quiz {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .category, .questionNumber, .question {
+            margin: 10px 0;
+        }
+        .options button {
+            display: block;
+            width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .options button.selected {
+            background-color: #1976d2;
+            color: white;
+        }
+        .controls button {
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz">
+        <h1>Quiz Master</h1>
+        <p class="category">CATEGORY: <span id="category">General Knowledge</span></p>
+        <p class="category">DIFFICULTY: <span id="difficulty">Medium</span></p>
+        <p class="category">No of Questions: <span id="number">10</span></p>
+        <div class="questionNumber">
+            <p style="font-weight: bold;" id="questionCount">1 of 10</p>
+        </div>
+        <div class="question">
+            <p style="font-weight: bold;" id="questionText">Loading...</p>
+        </div>
+        <div class="options" id="optionsContainer">
+            <!-- Options will be populated dynamically -->
+        </div>
+        <div class="controls">
+            <button id="nextButton" onclick="nextQuestion()">Next Question</button>
+            <button onclick="quitQuiz()">Quit</button>
+        </div>
+    </div>
+
+    <script>
+        // Variables
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        // Load initial data from sessionStorage
+        const category = sessionStorage.getItem('category') || "General Knowledge";
+        const difficulty = sessionStorage.getItem('difficulty') || "Medium";
+        const number = sessionStorage.getItem('number') || "10";
+        document.getElementById('category').textContent = category;
+        document.getElementById('difficulty').textContent = difficulty;
+        document.getElementById('number').textContent = number;
+
+        // Function to normalize answers for comparison
+        function normalizeAnswer(answer) {
+            if (!answer) return "";
+            return answer.trim().replace(/[^a-zA-Z0-9\s]/g, '').toLowerCase();
+        }
+
+        // Function to fetch questions from Gemini API
+        async function generateQuestions() {
+            const apiKey = "AIzaSyAa93ne8H94pDH-YwSKTiObPU0s6aqpCWw"; // Replace with your actual API key
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const prompt = `You are an expert quiz master. Provide exactly ${number} multiple choice questions in the category "${category}" with difficulty "${difficulty}". Format each question as: Question: [question text] $ [Option1]^[Option2]^[Option3]^[Option4]^[correctoption]. Ensure the correct option is one of the four provided options. Return only the formatted questions, one per line, with no additional text or explanations.`;
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "contents": [{
+                            "parts": [{
+                                "text": prompt
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("API Response:", data);
+
+                const questionsText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!questionsText) {
+                    throw new Error("No questions received from the API.");
+                }
+                console.log("Raw Questions Text:", questionsText);
+
+                // Parse the questions
+                questions = questionsText.split('\n').map(item => {
+                    const trimmedItem = item.trim();
+                    if (!trimmedItem.startsWith('Question:')) return null;
+                    const parts = trimmedItem.split('$');
+                    if (parts.length !== 2) return null;
+                    const question = parts[0].replace('Question:', '').trim();
+                    const optionsString = parts[1].trim();
+                    const optionArray = optionsString.split('^').map(option => option.trim());
+                    if (optionArray.length < 5) return null; // Ensure 4 options + correct answer
+                    const correctOption = optionArray.pop();
+                    return { 
+                        question, 
+                        options: optionArray, 
+                        correctOption: correctOption || "Not specified",
+                        normalizedCorrectOption: normalizeAnswer(correctOption)
+                    };
+                }).filter(Boolean);
+
+                console.log("Parsed Questions:", questions);
+
+                if (questions.length === 0) {
+                    throw new Error("Failed to parse questions from API response.");
+                }
+
+                if (questions.length !== parseInt(number)) {
+                    console.warn(`Expected ${number} questions, but received ${questions.length}.`);
+                }
+
+                // Initialize userAnswers array with empty strings
+                userAnswers = new Array(questions.length).fill("");
+                console.log("Initialized userAnswers:", userAnswers);
+
+                updateQuestion(); // Display the first question
+            } catch (error) {
+                console.error("Error fetching quiz data:", error);
+                alert("Failed to fetch quiz questions from the API. Please check your API key or try again later.");
+                document.getElementById('questionText').textContent = "Error loading questions.";
+                document.getElementById('optionsContainer').innerHTML = "<p>Unable to load options.</p>";
+            }
+        }
+
+        // Function to select an answer
+        function selectAnswer(answer) {
+            if (!answer) {
+                console.error(`No answer provided for Question ${currentQuestionIndex + 1}`);
+                userAnswers[currentQuestionIndex] = "Not answered";
+            } else {
+                userAnswers[currentQuestionIndex] = answer.trim();
+            }
+            console.log(`Selected Answer for Question ${currentQuestionIndex + 1}:`, userAnswers[currentQuestionIndex]);
+            console.log("Current userAnswers array:", userAnswers);
+            const buttons = document.querySelectorAll('.options button');
+            buttons.forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.textContent.trim() === answer.trim()) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+
+        // Function to handle next question or finish quiz
+        function nextQuestion() {
+            if (!userAnswers[currentQuestionIndex]) {
+                alert('Please select an answer');
+                return;
+            }
+
+            if (currentQuestionIndex === questions.length - 1) {
+                score = questions.reduce((acc, q, idx) => {
+                    const userAnswer = userAnswers[idx] || "Not answered";
+                    const normalizedUserAnswer = normalizeAnswer(userAnswer);
+                    const normalizedCorrectAnswer = q.normalizedCorrectOption || "";
+                    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+                    console.log(`Question ${idx + 1}: User Answer: "${userAnswer}", Normalized User: "${normalizedUserAnswer}", Correct Answer: "${q.correctOption}", Normalized Correct: "${normalizedCorrectAnswer}", Correct: ${isCorrect}`);
+                    return acc + (isCorrect ? 1 : 0);
+                }, 0);
+                console.log("Final Score:", score, "out of", questions.length);
+
+                const scoreData = {
+                    score: score,
+                    total: questions.length,
+                    questions: questions,
+                    userAnswers: userAnswers
+                };
+                sessionStorage.setItem('scoreData', JSON.stringify(scoreData));
+                console.log("Score Data Stored:", scoreData);
+
+                alert(`Quiz Finished! Your score: ${score}/${questions.length}`);
+                window.location.href = 'Score.html';
+                return;
+            }
+
+            currentQuestionIndex++;
+            updateQuestion();
+        }
+
+        // Function to update question display
+        function updateQuestion() {
+            if (!questions || questions.length === 0 || !questions[currentQuestionIndex]) {
+                document.getElementById('questionText').textContent = "No questions available.";
+                document.getElementById('questionCount').textContent = "0 of 0";
+                document.getElementById('optionsContainer').innerHTML = "<p>No options available</p>";
+                return;
+            }
+
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById('questionCount').textContent = `${currentQuestionIndex + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = currentQuestion.question;
+
+            const optionsDiv = document.getElementById('optionsContainer');
+            optionsDiv.innerHTML = '';
+            if (currentQuestion.options && Array.isArray(currentQuestion.options)) {
+                currentQuestion.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.onclick = () => selectAnswer(option);
+                    optionsDiv.appendChild(button);
+                    optionsDiv.appendChild(document.createElement('br'));
+                });
+                console.log("Options Rendered for Question", currentQuestionIndex + 1, ":", currentQuestion.options);
+            } else {
+                optionsDiv.innerHTML = "<p>No options available</p>";
+                console.error("No options found for question:", currentQuestion);
+            }
+
+            document.getElementById('nextButton').textContent = 
+                currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question';
+        }
+
+        // Function to quit quiz
+        function quitQuiz() {
+            window.location.href = 'Home.html';
+        }
+
+        // Fetch questions on page load
+        generateQuestions();
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" type="png" href="images/icon/favicon.png">
+    <title>Login SignUp</title>
+    <link rel="stylesheet" href="loginStyle.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+        function handleCredentialResponse(response) {
+            // Send Google ID token to the backend
+            fetch('google_login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ credential: response.credential })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "index.php"; // Redirect to home page
+                } else {
+                    alert(data.error || "Google Sign-In failed");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Server error during Google Sign-In");
+            });
+        }
+
+        function googleSignIn() {
+            google.accounts.id.initialize({
+                client_id: "1053051987654-lb9e50kilpnef5fr72bdtm8b3r2ipiq6.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInButton"),
+                { theme: "outline", size: "large" }
+            );
+            google.accounts.id.prompt();
+        }
+
+        function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return false;
+            }
+            return true;
+        }
+
+        window.onload = function() {
+            googleSignIn();
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                alert("Success: " + urlParams.get('success'));
+            } else if (urlParams.has('error')) {
+                alert("Error: " + urlParams.get('error'));
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="form-box">
+        <div class="button-box">
+            <div id="btn"></div>
+            <button type="button" class="toggle-btn" id="log" onclick="login()" style="color: #fff;">Log In</button>
+            <button type="button" class="toggle-btn" id="reg" onclick="register()">Register</button>
+        </div>
+        <div class="social-icons">
+            <img src="images/icon/fb2.png">
+            <img src="images/icon/insta2.png">
+            <img src="images/icon/tt2.png">
+        </div>
+        
+        <!-- Login Form -->
+        <form id="login" class="input-group" action="login.php" method="POST">
+            <div class="inp">
+                <img src="images/icon/user.png">
+                <input type="text" name="email" class="input-field" placeholder="Username or Email" required>
+            </div>
+            <div class="inp">
+                <img src="images/icon/password.png">
+                <input type="password" name="password" class="input-field" placeholder="Password" required>
+            </div>
+            <input type="checkbox" class="check-box">Remember Password
+            <button type="submit" class="submit-btn">Log In</button>
+        </form>
+        
+        <div class="other" id="other">
+            <div class="instead">
+                <div></div>
+                <h3>or</h3>
+            </div>
+            <div id="googleSignInButton"></div>
+        </div>
+        
+        <!-- Registration Form -->
+        <form id="register" class="input-group" action="register.php" method="POST" onsubmit="return validatePasswords()">
+            <input type="text" name="full_name" class="input-field" placeholder="Full Name" required>
+            <input type="email" name="email" class="input-field" placeholder="Email Address" required>
+            <input type="text" name="phone_number" class="input-field" placeholder="Phone Number (e.g., +1234567890)" required>
+            <input type="date" name="dob" class="input-field" placeholder="Date of Birth" required>
+            <select name="gender" class="input-field" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="password" id="password" name="password" class="input-field" placeholder="Create Password" required>
+            <input type="password" id="confirm_password" name="confirm_password" class="input-field" placeholder="Confirm Password" required>
+            <input type="checkbox" class="check-box" id="chk Agree">I agree to the Terms & Conditions
+            <button type="submit" class="submit-btn reg-btn">Register</button>
+        </form>
+    </div>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logout - LearnSphere</title>
+  <style>
+    /* General Styles */
+    /* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f3f4f6;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Header */
+header {
+  background: linear-gradient(to right, #06BBCC, #0487A0);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+header:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  animation: slideIn 0.8s ease-out;
+}
+
+header .buttons a {
+  text-decoration: none;
+  color: white;
+  background-color: #06BBCC;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+  transition: all 0.3s ease;
+}
+
+header .buttons a:hover {
+  background-color: #036575;
+  transform: scale(1.1) rotate(-2deg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Section */
+.logout-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 150px);
+  text-align: center;
+  background-color: #f9fbfc;
+  padding: 2rem 1rem;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.logout-container h2 {
+  font-size: 2.5rem;
+  color: #064A55;
+  margin-bottom: 1rem;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.logout-container p {
+  font-size: 1.2rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+  animation: fadeIn 1.2s ease-out;
+}
+
+.logout-container .buttons a {
+  text-decoration: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  margin: 0 0.8rem;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.logout-container .buttons a.login {
+  background-color: #06BBCC;
+  color: white;
+}
+
+.logout-container .buttons a.login:hover {
+  background-color: #0487A0;
+  transform: scale(1.1) rotate(2deg);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logout-container .buttons a.home {
+  background-color: #0487A0;
+  color: white;
+}
+
+.logout-container .buttons a.home:hover {
+  background-color: #036575;
+  transform: scale(1.1) rotate(-2deg);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+footer {
+  background-color: #064A55;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  position: relative;
+  animation: fadeIn 1s ease-in-out;
+}
+
+footer a {
+  color: #06BBCC;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #0487A0;
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .logout-container h2 {
+    font-size: 2rem;
+  }
+
+  .logout-container p {
+    font-size: 1rem;
+  }
+
+  .logout-container .buttons a {
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  header .buttons {
+    margin-top: 0.5rem;
+  }
+
+  .logout-container {
+    padding: 1rem;
+  }
+
+  .logout-container h2 {
+    font-size: 1.8rem;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>LearnSphere</h1>
+  </header>
+
+  <!-- Logout Confirmation Section -->
+  <div class="logout-container">
+    <h2>You have successfully logged out</h2>
+    <p>Thank you for visiting LearnSphere. We hope to see you again soon!</p>
+    <div class="buttons">
+      <a href="login.html" class="login">Login Again</a>
+      <a href="home.html" class="home">Return to Home</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 <a href="https://learnsphere.com" target="_blank">LearnSphere</a>. All rights reserved.
+  </footer>
+</body>
+</html>

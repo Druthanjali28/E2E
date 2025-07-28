@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - LearnSphere</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background: linear-gradient(90deg, #06BBCC, #08A0B2);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links li {
+      margin: 0 10px;
+    }
+
+    .nav-links a {
+      padding: 8px 12px;
+      color: white;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .profile-container {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .profile-container img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-left: 15px;
+      transition: transform 0.2s ease;
+    }
+
+    .profile-container img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Dropdown Styles */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: white;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 20px;
+      color: #333;
+      font-size: 14px;
+      text-align: left;
+      transition: background 0.3s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f8f9fa;
+    }
+
+    .profile-container:hover .dropdown-menu {
+      display: block;
+    }
+
+    /* About Section Styles */
+    .about-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .about-text {
+      flex: 1;
+      max-width: 600px;
+      margin: 20px;
+    }
+
+    .about-text h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .about-text p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .about-text ul {
+      list-style: disc inside;
+    }
+
+    .about-text li {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .about-image {
+      flex: 1;
+      max-width: 400px;
+      margin: 20px;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    /* Team Section Styles */
+    .team-section {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .team-section h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #06BBCC;
+    }
+
+    .team-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .team-member {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 200px;
+      text-align: center;
+    }
+
+    .team-member img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+
+    .team-member h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .team-member p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Footer Styles */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #06BBCC;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">LearnSphere 🌟</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.php">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="courses.html">Courses</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="discussion_forum/index.html">Discussion</a></li>
+          <li><a href="feedback.html">Feedback</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="logout.html">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="about-text">
+      <h1>Welcome to LearnSphere</h1>
+      <p>LearnSphere is your ultimate destination for online learning. We provide a wide range of courses, tailored by skilled instructors to meet your educational needs. From international certifications to hands-on projects, we’re committed to excellence in education.</p>
+      <ul>
+        <li>Skilled Instructors</li>
+        <li>International Certification</li>
+        <li>Flexible Online Classes</li>
+        <li>Interactive Learning Environment</li>
+      </ul>
+    </div>
+    <div class="about-image">
+      <img src="about.jpg" alt="About Us Image">
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="team-section">
+    <h2>Meet Our Team</h2>
+    <div class="team-container">
+      <div class="team-member">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Druthanjali">
+        <h3>Druthanjali</h3>
+        <p>Lead Instructor</p>
+      </div>
+      <div class="team-member">
+        <img src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=100&h=100&fit=crop&crop=faces" alt="Prasanna">
+        <h3>Prasanna</h3>
+        <p>Course Designer</p>
+      </div>
+      <div class="team-member">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=faces" alt="Prabavathi">
+        <h3>Prabavathi</h3>
+        <p>web developer</p>
+      </div>
+      <div class="team-member">
+        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=faces" alt="Sahil">
+        <h3>Sahil</h3>
+        <p>web developer</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 LearnSphere. All Rights Reserved.
+  </footer>
+</body>
+</html>
