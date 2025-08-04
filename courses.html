@@ -236,7 +236,7 @@ a {
       <nav>
         <!-- Added inline style as a fallback to remove dots -->
         <ul class="nav-links" style="list-style: none !important;">
-          <li><a href="index.php">Home</a></li>
+          <li><a href="index2.php">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="courses.html">Courses</a></li>
           <li><a href="contact.html">Contact</a></li>
@@ -1961,20 +1961,17 @@ a {
 
     try {
       const response = await fetch(url);
-      console.log(`Response status: ${response.status}`);
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
       const data = await response.json();
-      console.log(`API response:`, data);
 
       if (data.items && data.items.length > 0) {
         const newVideos = data.items.map((item, index) => {
           const id = type === "playlist" ? item.id.playlistId : item.id.videoId;
-          const url = type === "playlist" ? `https://www.youtube.com/playlist?list=${id}` : `https://www.youtube.com/watch?v=${id}`;
+          const url = type === "playlist"
+            ? `https://www.youtube.com/playlist?list=${id}`
+            : `https://www.youtube.com/watch?v=${id}`;
           return {
-            id: (resourceData[sectionId].length + index + 1),
+            id: (resourceData[sectionId]?.length || 0) + index + 1,
             url: url,
             thumbnail: item.snippet.thumbnails?.high?.url || "https://via.placeholder.com/300x200",
             short: item.snippet.title.slice(0, 50) + (item.snippet.title.length > 50 ? "..." : ""),
@@ -1983,101 +1980,73 @@ a {
             rank: 0
           };
         });
-        resourceData[sectionId] = pageToken ? [...resourceData[sectionId], ...newVideos] : newVideos;
+
+        resourceData[sectionId] = pageToken
+          ? [...(resourceData[sectionId] || []), ...newVideos]
+          : newVideos;
         pageTokens[sectionId] = data.nextPageToken || '';
-        console.log(`Fetched ${newVideos.length} items for ${sectionId}, Total: ${resourceData[sectionId].length}`);
       } else {
-        console.warn(`No items returned for ${sectionId}. Response:`, data);
-        if (!pageToken) {
-          resourceData[sectionId] = [{ id: 1, url: "#", short: "No videos found", full: "Try again later or check API quota", clicks: 0, rank: 0 }];
-        }
+        resourceData[sectionId] = [{
+          id: 1,
+          url: "#",
+          short: "No videos found",
+          full: "Try again later or check API quota",
+          clicks: 0,
+          rank: 0
+        }];
         pageTokens[sectionId] = '';
       }
     } catch (error) {
       console.error(`Error fetching videos for ${sectionId}:`, error);
-      if (!pageToken) {
-        resourceData[sectionId] = [{ id: 1, url: "#", short: "Failed to load videos", full: `Error: ${error.message}`, clicks: 0, rank: 0 }];
-      }
-      pageTokens[sectionId] = '';
-    }
-    saveToStorage();
-    return resourceData[sectionId];
-  }
-
-  async function fetchNonVideoContent(sectionId) {
-    const course = sectionId.split('-')[0];
-    const level = sectionId.split('-')[1];
-    const type = sectionId.split('-')[2];
-    const counter = (staticPageCounters[sectionId] || 0) + 1;
-    staticPageCounters[sectionId] = counter;
-
-    const newContent = [
-      {
-        id: resourceData[sectionId].length + 1,
-        url: `https://example.com/${course}-${level}-${type}-${counter}`,
-        short: `${course} ${level} ${type} (More ${counter})`,
-        full: `Additional ${type} content for ${course} (${level}) - Page ${counter}`,
+      resourceData[sectionId] = [{
+        id: 1,
+        url: "#",
+        short: "Failed to load videos",
+        full: `Error: ${error.message}`,
         clicks: 0,
         rank: 0
-      }
-    ];
-    resourceData[sectionId] = [...resourceData[sectionId], ...newContent];
+      }];
+      pageTokens[sectionId] = '';
+    }
+
     saveToStorage();
     return resourceData[sectionId];
   }
 
   async function renderResources(sectionId) {
     const resourceList = document.getElementById(`${sectionId}-list`);
-    if (!resourceList) {
-      console.error(`No element found for ${sectionId}-list`);
-      return;
-    }
+    if (!resourceList) return;
 
     resourceList.innerHTML = "<p>Loading...</p>";
 
-    // Fetch initial content if empty
+    // Load resources if not already available
     if (!resourceData[sectionId] || resourceData[sectionId].length === 0) {
       if (sectionId.includes("mini-videos")) {
         await fetchVideos(sectionId);
       } else {
-        if (!resourceData[sectionId]) {
-          resourceData[sectionId] = [];
-        }
-        if (resourceData[sectionId].length === 0) {
-          const course = sectionId.split('-')[0];
-          const level = sectionId.split('-')[1];
-          const type = sectionId.split('-')[2];
-          resourceData[sectionId].push({
-            id: 1,
-            url: `https://example.com/${course}-${level}-${type}`,
-            short: `${course} ${level} ${type} (Default)`,
-            full: `Default ${type} entry for ${course} (${level})`,
-            clicks: 0,
-            rank: 0
-          });
-          saveToStorage();
-        }
+        resourceData[sectionId] = [{
+          id: 1,
+          url: `https://example.com/${sectionId}`,
+          short: `${sectionId} default resource`,
+          full: `Default content for ${sectionId}`,
+          clicks: 0,
+          rank: 0
+        }];
       }
+      saveToStorage();
     }
 
-    const resources = resourceData[sectionId] || [];
-    if (resources.length === 0) {
-      resourceList.innerHTML = "<p>No resources available</p>";
-      return;
-    }
-
-    // Sort resources by clicks in descending order
-    resources.sort((a, b) => b.clicks - a.clicks);
-
-    // Save the sorted order to resourceData and localStorage
-    resourceData[sectionId] = resources;
+    // Sort based on click count (PageRank-like)
+    resourceData[sectionId].sort((a, b) => b.clicks - a.clicks);
     saveToStorage();
 
+    const resources = resourceData[sectionId];
     resourceList.innerHTML = "";
+
     resources.forEach(res => {
-      const resourceItem = document.createElement("div");
-      resourceItem.className = "resource-item";
-      resourceItem.innerHTML = `
+      const item = document.createElement("div");
+      item.className = "resource-item";
+      item.innerHTML = `
         <a href="${res.url}" target="_blank" onclick="increaseCount(event, '${sectionId}', ${res.id})">
           ${res.thumbnail ? `<img src="${res.thumbnail}" alt="Thumbnail" style="width: 100%; border-radius: 8px;">` : res.short}
         </a>
@@ -2085,7 +2054,7 @@ a {
         <button onclick="toggleContent('${sectionId}', ${res.id})">View More</button>
         <span>Clicks: <span id="${sectionId}-count-${res.id}">${res.clicks}</span></span>
       `;
-      resourceList.appendChild(resourceItem);
+      resourceList.appendChild(item);
     });
   }
 
@@ -2109,6 +2078,7 @@ a {
     const resource = resources.find(r => r.id === id);
     if (resource) {
       resource.clicks += 1;
+      resourceData[sectionId].sort((a, b) => b.clicks - a.clicks); // Sort after update
       saveToStorage();
       renderResources(sectionId); // Re-render with updated order
       window.open(resource.url, '_blank');
@@ -2116,15 +2086,15 @@ a {
   }
 
   function showSection(sectionId) {
-    document.querySelectorAll('.section').forEach(section => {
-      section.classList.remove('active');
+    document.querySelectorAll('.section').forEach(sec => {
+      sec.classList.remove('active');
+      sec.style.display = "none";
     });
     const section = document.getElementById(sectionId);
     if (section) {
       section.classList.add('active');
-      if (sectionId.includes("mini-videos") || sectionId.includes("tutorials") || sectionId.includes("projects") || sectionId.includes("docs") || sectionId.includes("resources")) {
-        renderResources(sectionId);
-      }
+      section.style.display = "block";
+      renderResources(sectionId);
     }
   }
 
