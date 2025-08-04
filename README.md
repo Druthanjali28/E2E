@@ -21,7 +21,8 @@ This is a full-stack end-to-end (E2E) web application that:
 
 ## 🌐 Live Demo
 
-🔗 **Deployed Link**:  phpctud620.infinityfreeapp.com  
+🔗 **Deployed Link**: [phpctud620.infinityfreeapp.com](https://phpctud620.infinityfreeapp.com)
+
 ---
 
 ## 🚀 Features
